@@ -10,7 +10,7 @@ public class Student {
     private String mail;
     private String password;
 
-    int balance = 0;
+    private int balance = 0;
     public Student(){
 
     }
