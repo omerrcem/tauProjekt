@@ -36,20 +36,8 @@ public class StudentController {
         list.addStudent(s);
     }
 
-    @RequestMapping(value = "get/", method = RequestMethod.POST)
-    public void get( @RequestHeader("Authorization") String token){
 
-        System.out.println(token);
 
-        String user = Jwts.parser()
-                .setSigningKey(SECRET.getBytes())
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                .getBody()
-                .getSubject();
-
-        System.out.println(user);
-
-    }
 
     //Ogrenci bilgisini geitrmek için method
     //Gonderilen json dosyası sadece jwt token içermeli
@@ -57,19 +45,20 @@ public class StudentController {
     public Student getInfo(@PathVariable(value = "id") String id){
        Student s = list.getStudentWithoutPass(id);
         if (s == null) {
-            throw new UsernameNotFoundException(id);
+            throw new UsernameNotFoundException(studentId);
         }
-
         return s;
     }
+
+
+
 
     //Odeme methodu
     //gonderen kisi bir json dosyasına token, nereye odedigini ve numarayi yollamali
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
-    public String pay(@RequestBody payType pt){
+    public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token){
         int priceAmount = plist.getPrice(pt.priceId);
-        String studentId = pt.studentId;
-
+        String studentId = tokenToStudentIdParser(token);
         if (list.getStudent(studentId).getBalance()>priceAmount){
             list.getStudent(studentId).setBalance( list.getStudent(studentId).getBalance() - priceAmount);
             return "paid successfully";
@@ -78,15 +67,35 @@ public class StudentController {
         }
     }
 
-    //Para yollama methodu
-    //gonderen, gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
-    @RequestMapping(value = "/transfer", method = RequestMethod.POST)
-    public String transfer(@RequestBody moneyTransferInfo mti){
-        String sender = mti.senderId;
-        String receiver = mti.receiverId;
-        int amount = mti.amount;
 
-        Student r = list.getStudentWithoutPass(receiver);
+
+    //Para yukleme methodu
+    //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
+    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    public String deopsit(@RequestHeader("Authorization") String token, @RequestBody MoneyInfo moneyInfo){
+        int amount = moneyInfo.getAmountMoney();
+        String studentId = tokenToStudentIdParser(token);
+
+        Student r = list.getStudent(studentId);
+        if (r == null) {
+            throw new UsernameNotFoundException(studentId);
+        }
+
+        r.setBalance( r.getBalance() + amount);
+        return ("deposited successfully");
+    }
+
+
+
+    //Para yollama methodu
+    //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
+    @RequestMapping(value = "/transfer", method = RequestMethod.POST)
+    public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token){
+        String sender = tokenToStudentIdParser(token);
+        String receiver = mti.getReceiverId();
+        int amount = mti.getAmount();
+
+        Student r = list.getStudent(receiver);
         if (r == null) {
             throw new UsernameNotFoundException(receiver);
         }
@@ -101,6 +110,30 @@ public class StudentController {
     }
 
 
+    //Sifre degistirme methodu
+    //Gonderen kisinin json dosyasi icinde jwt token ve yeni sifreyi gondermesi gerekir
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    private String changePassword(@RequestBody PasswordInfo passInfo, @RequestHeader("Authorization") String token){
+        String newPass = bCryptPasswordEncoder.encode(passInfo.getNewPass());
+        String studentId = tokenToStudentIdParser(token);
+
+        Student s = list.getStudent(studentId);
+        s.setPassword(newPass);
+        return "password changed successfully";
+    }
+
+
+
+    //token icindeki kullanici adini geri dondurur
+    private String tokenToStudentIdParser(String token){
+        String user = Jwts.parser()
+                .setSigningKey(SECRET.getBytes())
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                .getBody()
+                .getSubject();
+        return user;
+    }
+
     @Bean
     public StudentList list(){
         return list;
@@ -110,47 +143,42 @@ public class StudentController {
 
 //Para Transferi bilgilerini saklamak için gecici sinif
 class moneyTransferInfo{
-    String senderId;
     String receiverId;
     int amount;
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
 
     public String getReceiverId() {
         return receiverId;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
-    }
-
     public int getAmount() {
         return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 }
 
 
 //Odeme methodu için gecici sinif
-class payType{
-    String studentId;
+class PayType{
     String priceId;
-
-    public String getStudentId() {
-        return studentId;
-    }
 
     public String getPriceId() {
         return priceId;
     }
 }
 
+//Para yukleme methodu icin gecici sinif
+class MoneyInfo{
+    int amountMoney;
+
+    public int getAmountMoney() {
+        return amountMoney;
+    }
+}
+
+//Sifre degistirmek icin gecici sinif
+class PasswordInfo{
+    String newPass;
+
+    public String getNewPass(){
+        return newPass;
+    }
+}
