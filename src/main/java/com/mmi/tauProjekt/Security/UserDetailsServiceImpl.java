@@ -22,6 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     }
 
+    //login olunca bu kisimda kullanici var mi diye kontrol edilir
+    //daha sonra buraya sql baglanacak
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Student s = list.getStudent(username);

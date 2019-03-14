@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
+//SQL Baglaninca silinecek
+//Ogrencilerin saklandigi sinif
+
 public class StudentList {
 @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -28,6 +31,7 @@ public class StudentList {
         list.add(s);
     }
 
+    //Ogrenci bulup getirir
     public Student getStudent(String id){
         for (Student s: list) {
             if (s.getId().equals(id)){
@@ -37,6 +41,8 @@ public class StudentList {
         return null;
     }
 
+    //Bu fonksiyon clienta gonderilecek olan ogrenci json dosyasnin sifre icermemesi icin
+    //tamamen guvenlik icin
     public Student getStudentWithoutPass(String id){
         for (Student s: list) {
             if (s.getId().equals(id)){

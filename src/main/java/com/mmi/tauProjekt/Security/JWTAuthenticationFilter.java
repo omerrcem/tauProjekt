@@ -31,6 +31,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
     }
 
+
+
+    //Kullanici burada yetkilendirilir
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
@@ -49,6 +52,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+    //Basarili yetkilendirme sonucunda token sifrelenir ve geri gonderilir
     @Override
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,

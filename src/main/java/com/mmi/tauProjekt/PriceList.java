@@ -6,6 +6,10 @@ import com.mmi.tauProjekt.Entity.Price;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+//SQL Gelince silinecek
+//Hizmet ve urunlerin saklandigi sayfa
+
 public class PriceList {
 
     ArrayList<Price> prices = new ArrayList(Arrays.asList(

@@ -1,8 +1,9 @@
 package com.mmi.tauProjekt.Entity;
 
+//Hizmet ve urunlerin ucretlerini saklayan obje
 public class Price {
-    String id;
-    int price;
+    private String id;
+    private int price;
 
     public Price(String id, int price) {
         this.id = id;

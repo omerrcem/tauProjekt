@@ -1,5 +1,8 @@
 package com.mmi.tauProjekt.Entity;
 
+
+//Ogrenci bilgilerini saklayan obje
+//Sifreler her zaman crypted bir sekilde saklanir
 public class Student {
 
     private String id;

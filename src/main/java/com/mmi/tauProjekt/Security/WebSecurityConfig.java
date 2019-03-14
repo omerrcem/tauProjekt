@@ -16,6 +16,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SIGN_UP_URL;
 
+
+//Bu sinifta guvenlik ayarlari yapılıyor
+
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;

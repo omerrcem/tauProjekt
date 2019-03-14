@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
 import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
 
+
+
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -60,6 +62,9 @@ public class StudentController {
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token){
         int priceAmount = plist.getPrice(pt.priceId);
+            if (priceAmount == -1){
+                return "price not found";
+            }
         String studentId = tokenToStudentIdParser(token);
         if (list.getStudent(studentId).getBalance()>priceAmount){
             list.getStudent(studentId).setBalance( list.getStudent(studentId).getBalance() - priceAmount);
