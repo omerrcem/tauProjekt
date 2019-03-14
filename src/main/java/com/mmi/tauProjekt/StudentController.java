@@ -41,6 +41,11 @@ public class StudentController {
 
     //Ogrenci bilgisini geitrmek için method
     //Gonderilen json dosyası sadece jwt token içermeli
+    //Ogrenci sinfini sifresi silinmis bir sekilde geri dondurur
+    @RequestMapping(value = "/get-info",method = RequestMethod.POST)
+    public Student getInfo( @RequestHeader("Authorization") String token){
+        String studentId = tokenToStudentIdParser(token);
+        Student s = list.getStudentWithoutPass(studentId);
         if (s == null) {
             throw new UsernameNotFoundException(studentId);
         }
@@ -51,6 +56,7 @@ public class StudentController {
 
 
     //Odeme methodu
+    //gonderen kisi bir json dosyasına bir jwt token, nereye odedigini
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token){
         int priceAmount = plist.getPrice(pt.priceId);
