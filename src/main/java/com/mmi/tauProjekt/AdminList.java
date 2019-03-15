@@ -17,7 +17,35 @@ public class AdminList {
     ));
 
 
+    public void addAdmin(Admin s){
+        adminList.add(s);
+    }
 
+    //Admin bulup getirir
+    public Admin getAdmin(String id){
+        for (Admin s: adminList) {
+            if (s.getAdminId().equals(id)){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    //Bu fonksiyon clienta gonderilecek olan admin json dosyasnin sifre icermemesi icin
+    //tamamen guvenlik icin
+    public Admin getAdminWithoutPass(String id){
+        for (Admin s: adminList) {
+            if (s.getAdminId().equals(id)){
+                Admin message = new Admin();
+                message.setName(s.getName());
+                message.setPassword("");
+                message.setAdminId(s.getAdminId());
+                message.setMail(s.getMail());
+                return message;
+            }
+        }
+        return null;
+    }
 
 
 }

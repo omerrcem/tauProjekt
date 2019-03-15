@@ -7,6 +7,9 @@ public class Admin {
     private String mail;
     private String password;
 
+    public Admin(){
+
+    }
 
     public Admin(String adminId, String name, String mail, String password) {
         this.adminId = adminId;
