@@ -20,12 +20,11 @@ public class Student {
         this.password = password;
     }
 
-    public Student(String id, String name, String mail, String password, int balance) {
+    public Student(String id, String name, String mail, String password) {
         this.id = id;
         this.name = name;
         this.mail = mail;
         this.password = password;
-        this.balance = balance;
     }
 
 

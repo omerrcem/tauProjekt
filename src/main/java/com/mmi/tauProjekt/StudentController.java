@@ -1,15 +1,30 @@
 package com.mmi.tauProjekt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.zxing.WriterException;
 import com.mmi.tauProjekt.Entity.Student;
+import com.mmi.tauProjekt.QrCode.QrCodeGenerator;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
 import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
@@ -33,7 +48,11 @@ public class StudentController {
     //Ogrenci kayit yeri
     //Token gerektirmez
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    public void signUp(@RequestBody Student s) {
+    public void signUp(@RequestBody Student s) throws CustomException{
+    if (list.getStudent(s.getId()) != null){
+        throw new CustomException("StudentAlreadyExist");
+    }
+
         s.setPassword(bCryptPasswordEncoder.encode(s.getPassword()));
         list.addStudent(s);
     }
@@ -57,10 +76,12 @@ public class StudentController {
 
 
 
+
+
     //Odeme methodu
     //gonderen kisi bir json dosyasına bir jwt token, nereye odedigini
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
-    public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token){
+    public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token) throws CustomException {
         int priceAmount = plist.getPrice(pt.priceId);
             if (priceAmount == -1){
                 return "price not found";
@@ -70,7 +91,8 @@ public class StudentController {
             list.getStudent(studentId).setBalance( list.getStudent(studentId).getBalance() - priceAmount);
             return "paid successfully";
         }else {
-            return "insufficient balance";
+            throw new CustomException("InsufficientBalance");
+
         }
     }
 
@@ -97,7 +119,7 @@ public class StudentController {
     //Para yollama methodu
     //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
-    public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token){
+    public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException {
         String sender = tokenToStudentIdParser(token);
         String receiver = mti.getReceiverId();
         int amount = mti.getAmount();
@@ -112,7 +134,8 @@ public class StudentController {
             list.getStudent(receiver).setBalance(list.getStudent(receiver).getBalance() + amount);
         return "transfered successfully";
         }else {
-            return "insufficient balance";
+            throw new CustomException("InsufficientBalance");
+
         }
     }
 
@@ -128,6 +151,28 @@ public class StudentController {
         s.setPassword(newPass);
         return "password changed successfully";
     }
+
+
+    //Odeme QrCode uretmek icin method
+    //TODO: Aybuke uuid generator ile birlestirilecek
+    //Su anda bir qrkod resmini xgeri dondurur
+    //
+    @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST,  produces = MediaType.IMAGE_JPEG_VALUE)
+    private ResponseEntity<byte[]> getQrCode(@RequestHeader("Authorization") String token, HttpServletResponse res) throws IOException, WriterException {
+        String studentId = tokenToStudentIdParser(token);
+        File file = new File("./MyQRCode"+studentId+".png");
+        QrCodeGenerator.generateQRCodeImage(studentId,350,350,"./MyQRCode"+studentId+".png");
+
+
+        byte[] image = Files.readAllBytes(file.toPath());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(image.length);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+
+    }
+
+
 
 
 

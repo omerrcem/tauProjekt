@@ -11,7 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.HEADER_STRING;
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
@@ -31,6 +33,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             chain.doFilter(req, res);
+
+            System.out.println("Unauthorized request: " + "  " +req.getRemoteHost()
+                    + " " + req.getRequestURL() + " " +new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+                    .format(Calendar.getInstance().getTime()));
             return;
         }
 
@@ -52,10 +58,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
+                System.out.println("Authorized request: " + user + "  " +request.getRemoteHost()
+                        + " " + request.getRequestURL() + " " +new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+                        .format(Calendar.getInstance().getTime()));
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+
             }
+
             return null;
+
         }
+
         return null;
     }
 }

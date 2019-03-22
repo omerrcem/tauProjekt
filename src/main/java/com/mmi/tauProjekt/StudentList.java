@@ -19,8 +19,8 @@ public class StudentList {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     ArrayList<Student> list = new ArrayList(Arrays.asList(
-            new Student("160503133","omercem","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass"),10),
-            new Student("160503134", "alp","alp@gmail.com",bCryptPasswordEncoder.encode("pass123"),50)
+            new Student("160503133","omercem","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass")),
+            new Student("160503134", "alp","alp@gmail.com",bCryptPasswordEncoder.encode("pass123"))
     ));
 
     public StudentList() {
@@ -56,6 +56,15 @@ public class StudentList {
             }
         }
         return null;
+    }
+
+    public void deleteStudent(String id){
+        for (Student s: list){
+            if (s.getId().equals(id)){
+                list.remove(s);
+            }
+        }
+
     }
 
 

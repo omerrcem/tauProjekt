@@ -20,6 +20,10 @@ public class TauProjektApplication {
 	@Bean
 	public StudentList studentList(){return new StudentList();}
 
+	//Admin listesi burada oluşturulur
+	@Bean
+	public AdminList adminList(){return new AdminList();}
+
 	public static void main(String[] args) {
 		SpringApplication.run(TauProjektApplication.class, args);
 	}

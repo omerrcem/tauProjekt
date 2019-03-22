@@ -1,5 +1,7 @@
 package com.mmi.tauProjekt.Security;
 
+import com.mmi.tauProjekt.AdminList;
+import com.mmi.tauProjekt.Entity.Admin;
 import com.mmi.tauProjekt.Entity.Student;
 import com.mmi.tauProjekt.StudentList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private StudentList list;
 
+    @Autowired
+    private AdminList adminList;
+
     public UserDetailsServiceImpl() {
 
     }
@@ -28,8 +33,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Student s = list.getStudent(username);
         if (s == null) {
-            throw new UsernameNotFoundException(username);
+            Admin a = adminList.getAdmin(username);
+            if ( a == null){
+                throw new UsernameNotFoundException(username);
+            }
+
+            return new User(a.getAdminId(), a.getPassword(), emptyList());
         }
+
+
        return new User(s.getId(), s.getPassword(), emptyList());
     }
 
