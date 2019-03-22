@@ -91,7 +91,7 @@ public class StudentController {
             list.getStudent(studentId).setBalance( list.getStudent(studentId).getBalance() - priceAmount);
             return "paid successfully";
         }else {
-            throw new CustomException("InsufficientBalance");
+           return "insufficient balance";
 
         }
     }
@@ -102,7 +102,7 @@ public class StudentController {
     //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
     @RequestMapping(value = "/deposit", method = RequestMethod.POST)
     public String deopsit(@RequestHeader("Authorization") String token, @RequestBody MoneyInfo moneyInfo){
-        int amount = moneyInfo.getAmountMoney();
+        int amount = moneyInfo.getAmount();
         String studentId = tokenToStudentIdParser(token);
 
         Student r = list.getStudent(studentId);
@@ -134,7 +134,7 @@ public class StudentController {
             list.getStudent(receiver).setBalance(list.getStudent(receiver).getBalance() + amount);
         return "transfered successfully";
         }else {
-            throw new CustomException("InsufficientBalance");
+            return "insufficient balance";
 
         }
     }
@@ -219,10 +219,10 @@ class PayType{
 
 //Para yukleme methodu icin gecici sinif
 class MoneyInfo{
-    int amountMoney;
+    int amount;
 
-    public int getAmountMoney() {
-        return amountMoney;
+    public int getAmount() {
+        return amount;
     }
 }
 

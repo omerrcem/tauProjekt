@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e3d7587-88ef-43ab-a811-d34305219bfd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_beust_jcommander_1_48.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_jai_imageio_jai_imageio_core_1_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_zxing_core_3_3_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_zxing_javase_3_3_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/QrCodeGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/UserDetailsServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tauProjekt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tauProjekt.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -68,14 +54,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="8060" />
+          <entry key="java" value="8121" />
           <entry key="txt" value="43" />
           <entry key="xml" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="8060" />
+          <entry key="JAVA" value="8121" />
           <entry key="PLAIN_TEXT" value="43" />
           <entry key="XML" value="12" />
         </counts>
@@ -84,11 +70,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+            <state relative-caret-position="76">
+              <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#7212#7213#0" expanded="true" />
@@ -158,11 +144,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="9" column="63" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="63" />
+            <state relative-caret-position="200">
+              <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -236,8 +222,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentList.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/QrCodeGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java" />
       </list>
     </option>
   </component>
@@ -293,6 +279,15 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
               <item name="Security" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="StudentController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
@@ -398,14 +393,20 @@
       <option name="project" value="LOCAL" />
       <updated>1552641077381</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="More development">
+      <created>1553243157232</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1553243157232</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27651006" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27651006" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -414,8 +415,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.5475177" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3654391" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27943262" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.18297872" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -756,18 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7212#7213#0" expanded="true" />
-            <element signature="e#7241#7242#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
@@ -814,8 +803,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="63" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="63" />
+        <state relative-caret-position="200">
+          <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StudentController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7212#7213#0" expanded="true" />
+            <element signature="e#7241#7242#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
