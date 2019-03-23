@@ -173,6 +173,13 @@ public class StudentController {
     }
 
 
+/*
+    @RequestMapping(value = "/send-request-code", method = RequestMethod.POST)
+    private String sendQrCode(@RequestBody QrCodeJsonParser qrCodeJsonParser){
+
+
+    }
+*/
 
 
 
@@ -233,4 +240,19 @@ class PasswordInfo{
     public String getNewPass(){
         return newPass;
     }
+}
+
+//Barkod Okuyucudan gelen kodu almak icin sinif
+class QrCodeJsonParser{
+    String qrCode;
+
+    public QrCodeJsonParser(String qrCode){
+        this.qrCode = qrCode;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.mmi.tauProjekt;
 
+import com.mmi.tauProjekt.QrCode.UserPaymentToken;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,11 @@ public class TauProjektApplication {
 	//Admin listesi burada oluşturulur
 	@Bean
 	public AdminList adminList(){return new AdminList();}
+
+	//Odeme islemi icin anlik ozel kod ureten sinif
+	@Bean
+	public UserPaymentToken userPaymentToken(){return new UserPaymentToken();}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(TauProjektApplication.class, args);
