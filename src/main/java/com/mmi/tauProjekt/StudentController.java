@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.WriterException;
 import com.mmi.tauProjekt.Entity.Student;
 import com.mmi.tauProjekt.QrCode.QrCodeGenerator;
+import com.mmi.tauProjekt.QrCode.UserPaymentToken;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -38,12 +39,15 @@ public class StudentController {
     private StudentList list;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private PriceList plist = new PriceList();
+    private UserPaymentToken userPaymentToken;
 
     public StudentController(StudentList list,
-                             BCryptPasswordEncoder bCryptPasswordEncoder) {
+                             BCryptPasswordEncoder bCryptPasswordEncoder, UserPaymentToken userPaymentToken) {
         this.list = list;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userPaymentToken = userPaymentToken;
     }
+
 
     //Ogrenci kayit yeri
     //Token gerektirmez
@@ -160,8 +164,10 @@ public class StudentController {
     @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST,  produces = MediaType.IMAGE_JPEG_VALUE)
     private ResponseEntity<byte[]> getQrCode(@RequestHeader("Authorization") String token, HttpServletResponse res) throws IOException, WriterException {
         String studentId = tokenToStudentIdParser(token);
+        String qrCode = userPaymentToken.getPaymentToken(studentId);
+
         File file = new File("./MyQRCode"+studentId+".png");
-        QrCodeGenerator.generateQRCodeImage(studentId,350,350,"./MyQRCode"+studentId+".png");
+        QrCodeGenerator.generateQRCodeImage(qrCode,350,350,"./MyQRCode"+studentId+".png");
 
 
         byte[] image = Files.readAllBytes(file.toPath());
