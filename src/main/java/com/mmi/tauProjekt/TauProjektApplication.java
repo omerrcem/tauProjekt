@@ -1,6 +1,6 @@
 package com.mmi.tauProjekt;
 
-import com.mmi.tauProjekt.QrCode.UserPaymentToken;
+import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +17,9 @@ public class TauProjektApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	//Ogrenci listesi olusturulur
+	//Kullanici listesi olusturulur
 	@Bean
-	public StudentList studentList(){return new StudentList();}
+	public CustomerList customerList(){return new CustomerList();}
 
 	//Admin listesi burada oluşturulur
 	@Bean
@@ -27,7 +27,7 @@ public class TauProjektApplication {
 
 	//Odeme islemi icin anlik ozel kod ureten sinif
 	@Bean
-	public UserPaymentToken userPaymentToken(){return new UserPaymentToken();}
+	public CustomerPaymentToken customerPaymentToken(){return new CustomerPaymentToken();}
 
 
 	public static void main(String[] args) {

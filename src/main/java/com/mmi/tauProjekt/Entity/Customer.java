@@ -3,7 +3,7 @@ package com.mmi.tauProjekt.Entity;
 
 //Ogrenci bilgilerini saklayan obje
 //Sifreler her zaman crypted bir sekilde saklanir
-public class Student {
+public class Customer {
 
     private String id;
     private String name;
@@ -11,16 +11,16 @@ public class Student {
     private String password;
 
     private int balance = 0;
-    public Student(){
+    public Customer(){
 
     }
 
-    public Student(String id, String password){
+    public Customer(String id, String password){
         this.id = id;
         this.password = password;
     }
 
-    public Student(String id, String name, String mail, String password) {
+    public Customer(String id, String name, String mail, String password) {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -30,7 +30,7 @@ public class Student {
 
     @Override
     public boolean equals(Object obj) {
-        Student s = (Student) obj;
+        Customer s = (Customer) obj;
         if (this.id.equals(s.getId()) && this.password.equals(s.getId())){
             return true;
         }else {

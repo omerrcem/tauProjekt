@@ -1,6 +1,6 @@
 package com.mmi.tauProjekt;
 
-import com.mmi.tauProjekt.Entity.Student;
+import com.mmi.tauProjekt.Entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,66 +15,67 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     @Autowired
-    private StudentList studentList;
+    private CustomerList customerList;
     @Autowired
     private AdminList adminList;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public AdminController(StudentList studentList, AdminList adminList, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.studentList = studentList;
+    public AdminController(CustomerList CustomerList, AdminList adminList, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.customerList = CustomerList;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.adminList=adminList;
     }
 
 
     //
     //Admin panelinde ogrenci bilgilerini degistirmeye yarar
-    //Json icerisinde Student classına uygun bir body olmalı
+    //Json icerisinde Customer classına uygun bir body olmalı
     //Admin tokeni gerektirir
     //
-    @RequestMapping(value = "/edit-student-info", method = RequestMethod.POST)
-    public void editStudentInfo(@RequestBody Student targetStudent) {
-        Student s =studentList.getStudent(targetStudent.getId());
+    @RequestMapping(value = "/edit-customer-info", method = RequestMethod.POST)
+    public void editCustomerInfo(@RequestBody Customer targetCustomer) {
+        Customer s =customerList.getCustomer(targetCustomer.getId());
         if (s == null){
-            throw  new UsernameNotFoundException(targetStudent.getId());
+            throw  new UsernameNotFoundException(targetCustomer.getId());
         }
-        if (!targetStudent.getId().equals("")){
-            s.setId(targetStudent.getId());
+        if (!targetCustomer.getId().equals("")){
+            s.setId(targetCustomer.getId());
         }
-        if (targetStudent.getBalance()!=-1){
-            s.setBalance(targetStudent.getBalance());
+        if (targetCustomer.getBalance()!=-1){
+            s.setBalance(targetCustomer.getBalance());
         }
-        if (!targetStudent.getName().equals("")){
-            s.setName(targetStudent.getName());
+        if (!targetCustomer.getName().equals("")){
+            s.setName(targetCustomer.getName());
         }
-        if (!targetStudent.getMail().equals("")){
-            s.setMail(targetStudent.getMail());
+        if (!targetCustomer.getMail().equals("")){
+            s.setMail(targetCustomer.getMail());
         }
-        if(!targetStudent.getPassword().equals("")){
-            s.setPassword(bCryptPasswordEncoder.encode(targetStudent.getPassword()));
+        if(!targetCustomer.getPassword().equals("")){
+            s.setPassword(bCryptPasswordEncoder.encode(targetCustomer.getPassword()));
         }
     }
 
     //
     //Ogrenci silmeye yarar
     //
-    @RequestMapping(value = "/delete-student", method = RequestMethod.POST)
-    public void deleteStudent(@RequestBody StudentIdInfo studentIdInfo){
-        String id = studentIdInfo.getStudentId();
-        if (studentList.getStudent(id) == null){
+    @RequestMapping(value = "/delete-customer", method = RequestMethod.POST)
+    public void deleteCustomer(@RequestBody CustomerIdInfo CustomerIdInfo){
+        String id = CustomerIdInfo.getCustomerId();
+        if (customerList.getCustomer(id) == null){
             throw new UsernameNotFoundException(id);
         }
-        studentList.deleteStudent(id);
+        customerList.deleteCustomer(id);
 
     }
 
 }
 
-class StudentIdInfo{
-    private String studentId;
+class CustomerIdInfo{
+    private String customerId;
 
-    public String getStudentId() {
-        return studentId;
+    public String getCustomerId() {
+        return customerId;
     }
 }
 

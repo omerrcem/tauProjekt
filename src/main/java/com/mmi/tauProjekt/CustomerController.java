@@ -1,30 +1,23 @@
 package com.mmi.tauProjekt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.WriterException;
-import com.mmi.tauProjekt.Entity.Student;
+import com.mmi.tauProjekt.Entity.Customer;
+import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.QrCode.QrCodeGenerator;
-import com.mmi.tauProjekt.QrCode.UserPaymentToken;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
@@ -33,32 +26,35 @@ import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
 
 
 @RestController
-@RequestMapping("/students")
-public class StudentController {
+@RequestMapping("/customers")
+public class CustomerController {
     @Autowired
-    private StudentList list;
+    private CustomerList list;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private PriceList plist = new PriceList();
-    private UserPaymentToken userPaymentToken;
+    private CustomerPaymentToken customerPaymentToken;
 
-    public StudentController(StudentList list,
-                             BCryptPasswordEncoder bCryptPasswordEncoder, UserPaymentToken userPaymentToken) {
+    public CustomerController(CustomerList list,
+                             BCryptPasswordEncoder bCryptPasswordEncoder, CustomerPaymentToken customerPaymentToken) {
         this.list = list;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.userPaymentToken = userPaymentToken;
+        this.customerPaymentToken = customerPaymentToken;
     }
+
+
+
 
 
     //Ogrenci kayit yeri
     //Token gerektirmez
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    public void signUp(@RequestBody Student s) throws CustomException{
-    if (list.getStudent(s.getId()) != null){
-        throw new CustomException("StudentAlreadyExist");
+    public void signUp(@RequestBody Customer s) throws CustomException{
+    if (list.getCustomer(s.getId()) != null){
+        throw new CustomException("CustomerAlreadyExist");
     }
 
         s.setPassword(bCryptPasswordEncoder.encode(s.getPassword()));
-        list.addStudent(s);
+        list.addCustomer(s);
     }
 
 
@@ -68,11 +64,11 @@ public class StudentController {
     //Gonderilen json dosyası sadece jwt token içermeli
     //Ogrenci sinfini sifresi silinmis bir sekilde geri dondurur
     @RequestMapping(value = "/get-info",method = RequestMethod.POST)
-    public Student getInfo( @RequestHeader("Authorization") String token){
-        String studentId = tokenToStudentIdParser(token);
-        Student s = list.getStudentWithoutPass(studentId);
+    public Customer getInfo( @RequestHeader("Authorization") String token){
+        String customerId = tokenToCustomerIdParser(token);
+        Customer s = list.getCustomerWithoutPass(customerId);
         if (s == null) {
-            throw new UsernameNotFoundException(studentId);
+            throw new UsernameNotFoundException(customerId);
         }
         return s;
     }
@@ -90,9 +86,9 @@ public class StudentController {
             if (priceAmount == -1){
                 return "price not found";
             }
-        String studentId = tokenToStudentIdParser(token);
-        if (list.getStudent(studentId).getBalance()>priceAmount){
-            list.getStudent(studentId).setBalance( list.getStudent(studentId).getBalance() - priceAmount);
+        String customerId = tokenToCustomerIdParser(token);
+        if (list.getCustomer(customerId).getBalance()>priceAmount){
+            list.getCustomer(customerId).setBalance( list.getCustomer(customerId).getBalance() - priceAmount);
             return "paid successfully";
         }else {
            return "insufficient balance";
@@ -102,16 +98,17 @@ public class StudentController {
 
 
 
+
     //Para yukleme methodu
     //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
     @RequestMapping(value = "/deposit", method = RequestMethod.POST)
     public String deopsit(@RequestHeader("Authorization") String token, @RequestBody MoneyInfo moneyInfo){
         int amount = moneyInfo.getAmount();
-        String studentId = tokenToStudentIdParser(token);
+        String customerId = tokenToCustomerIdParser(token);
 
-        Student r = list.getStudent(studentId);
+        Customer r = list.getCustomer(customerId);
         if (r == null) {
-            throw new UsernameNotFoundException(studentId);
+            throw new UsernameNotFoundException(customerId);
         }
 
         r.setBalance( r.getBalance() + amount);
@@ -120,22 +117,25 @@ public class StudentController {
 
 
 
+
+
+
     //Para yollama methodu
     //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
     public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException {
-        String sender = tokenToStudentIdParser(token);
+        String sender = tokenToCustomerIdParser(token);
         String receiver = mti.getReceiverId();
         int amount = mti.getAmount();
 
-        Student r = list.getStudent(receiver);
+        Customer r = list.getCustomer(receiver);
         if (r == null) {
             throw new UsernameNotFoundException(receiver);
         }
 
-        if (list.getStudent(sender).getBalance() > amount){
-            list.getStudent(sender).setBalance( list.getStudent(sender).getBalance() - amount);
-            list.getStudent(receiver).setBalance(list.getStudent(receiver).getBalance() + amount);
+        if (list.getCustomer(sender).getBalance() > amount){
+            list.getCustomer(sender).setBalance( list.getCustomer(sender).getBalance() - amount);
+            list.getCustomer(receiver).setBalance(list.getCustomer(receiver).getBalance() + amount);
         return "transfered successfully";
         }else {
             return "insufficient balance";
@@ -149,60 +149,79 @@ public class StudentController {
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     private String changePassword(@RequestBody PasswordInfo passInfo, @RequestHeader("Authorization") String token){
         String newPass = bCryptPasswordEncoder.encode(passInfo.getNewPass());
-        String studentId = tokenToStudentIdParser(token);
+        String customerId = tokenToCustomerIdParser(token);
 
-        Student s = list.getStudent(studentId);
+        Customer s = list.getCustomer(customerId);
         s.setPassword(newPass);
         return "password changed successfully";
     }
 
 
+
+
+
     //Odeme QrCode uretmek icin method
-    //TODO: Aybuke uuid generator ile birlestirilecek
-    //Su anda bir qrkod resmini xgeri dondurur
+    //Aybuke uuid generator ile birlestirildi
+    //S
     //
-    @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST,  produces = MediaType.IMAGE_JPEG_VALUE)
-    private ResponseEntity<byte[]> getQrCode(@RequestHeader("Authorization") String token, HttpServletResponse res) throws IOException, WriterException {
-        String studentId = tokenToStudentIdParser(token);
-        String qrCode = userPaymentToken.getPaymentToken(studentId);
+    @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST)
+    private String getQrCode(@RequestHeader("Authorization") String token) {
+        String customerId = tokenToCustomerIdParser(token);
+        String qrCode = customerPaymentToken.getPaymentToken(customerId);
 
-        File file = new File("./MyQRCode"+studentId+".png");
-        QrCodeGenerator.generateQRCodeImage(qrCode,350,350,"./MyQRCode"+studentId+".png");
-
-
-        byte[] image = Files.readAllBytes(file.toPath());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        headers.setContentLength(image.length);
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
-
+        return qrCode;
     }
 
 
-/*
-    @RequestMapping(value = "/send-request-code", method = RequestMethod.POST)
+
+
+
+    //Barkod okucudan gelen json dosyasini okuyup isleme sokar
+    //Barkod okuyucu okudgu qr kod icerigini ve urun idsini yollamali
+    //
+    @RequestMapping(value = "/send-qr-code", method = RequestMethod.POST)
     private String sendQrCode(@RequestBody QrCodeJsonParser qrCodeJsonParser){
+        String qrCode =qrCodeJsonParser.getQrCode();
+        String priceId = qrCodeJsonParser.getPriceId();
+        String customerId = customerPaymentToken.confirmPaymentToken(qrCode);
 
+        if (customerId!=null){
 
+            int priceAmount = plist.getPrice(priceId);
+            if (priceAmount == -1){
+                return "price not found";
+            }
+            if (list.getCustomer(customerId).getBalance()>priceAmount){
+                list.getCustomer(customerId).setBalance( list.getCustomer(customerId).getBalance() - priceAmount);
+                return "paid successfully";
+            }else {
+                return "insufficient balance";
+
+            }
+        }else {
+            return "qr code not found";
+        }
     }
-*/
+
+
 
 
 
     //token icindeki kullanici adini geri dondurur
-    private String tokenToStudentIdParser(String token){
-        String user = Jwts.parser()
+    private String tokenToCustomerIdParser(String token){
+        String Customer = Jwts.parser()
                 .setSigningKey(SECRET.getBytes())
                 .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                 .getBody()
                 .getSubject();
-        return user;
+        return Customer;
     }
-
+/*
     @Bean
-    public StudentList list(){
+    public CustomerList list(){
         return list;
     }
+    */
 }
 
 
@@ -251,6 +270,11 @@ class PasswordInfo{
 //Barkod Okuyucudan gelen kodu almak icin sinif
 class QrCodeJsonParser{
     String qrCode;
+    String priceId;
+
+    public QrCodeJsonParser(){
+
+    }
 
     public QrCodeJsonParser(String qrCode){
         this.qrCode = qrCode;
@@ -258,6 +282,10 @@ class QrCodeJsonParser{
 
     public String getQrCode() {
         return qrCode;
+    }
+
+    public String getPriceId(){
+        return priceId;
     }
 
 

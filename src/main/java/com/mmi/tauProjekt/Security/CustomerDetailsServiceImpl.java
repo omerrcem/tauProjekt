@@ -1,9 +1,10 @@
 package com.mmi.tauProjekt.Security;
 
 import com.mmi.tauProjekt.AdminList;
+import com.mmi.tauProjekt.CustomerList;
 import com.mmi.tauProjekt.Entity.Admin;
-import com.mmi.tauProjekt.Entity.Student;
-import com.mmi.tauProjekt.StudentList;
+import com.mmi.tauProjekt.Entity.Customer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
@@ -15,15 +16,15 @@ import org.springframework.stereotype.Service;
 import static java.util.Collections.emptyList;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomerDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private StudentList list;
+    private CustomerList list;
 
     @Autowired
     private AdminList adminList;
 
-    public UserDetailsServiceImpl() {
+    public CustomerDetailsServiceImpl() {
 
     }
 
@@ -31,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //daha sonra buraya sql baglanacak
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Student s = list.getStudent(username);
+        Customer s = list.getCustomer(username);
         if (s == null) {
             Admin a = adminList.getAdmin(username);
             if ( a == null){

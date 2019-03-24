@@ -2,7 +2,7 @@ package com.mmi.tauProjekt.Security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmi.tauProjekt.Entity.Student;
+import com.mmi.tauProjekt.Entity.Customer;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -38,8 +38,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            Student creds = new ObjectMapper()
-                    .readValue(req.getInputStream(), Student.class);
+            Customer creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), Customer.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
