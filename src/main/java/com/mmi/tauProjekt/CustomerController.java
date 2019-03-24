@@ -205,6 +205,28 @@ public class CustomerController {
 
 
 
+    @RequestMapping(value = "/is-paid", method = RequestMethod.POST)
+    public String isQrPaid(@RequestBody IsPaidInfo isPaidInfo,  @RequestHeader("Authorization") String token){
+
+        String qrCode = isPaidInfo.getQrCode();
+
+        if(customerPaymentToken.isPaid(qrCode)){
+            return "completed";
+        }
+
+        return "not completed";
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
     //token icindeki kullanici adini geri dondurur
@@ -288,5 +310,12 @@ class QrCodeJsonParser{
         return priceId;
     }
 
+}
 
+class IsPaidInfo{
+    String qrCode;
+
+    public String getQrCode() {
+        return qrCode;
+    }
 }
