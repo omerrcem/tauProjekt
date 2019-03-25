@@ -63,6 +63,7 @@ public class CustomerPaymentToken {
 
         if (userTokens.containsKey(qrcode) && !userTokens.get(qrcode).isPaid) {
             userTokens.get(qrcode).isPaid = true;
+            System.out.println("paid!");
             return userTokens.get(qrcode).getId();
         } else {
             return null;
