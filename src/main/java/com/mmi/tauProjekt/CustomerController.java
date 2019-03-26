@@ -168,7 +168,7 @@ public class CustomerController {
     private String getQrCode(@RequestHeader("Authorization") String token) {
         String customerId = tokenToCustomerIdParser(token);
         String qrCode = customerPaymentToken.getPaymentToken(customerId);
-
+        System.out.println(qrCode+ " für "+ customerId);
         return qrCode;
     }
 
