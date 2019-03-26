@@ -211,10 +211,10 @@ public class CustomerController {
         String qrCode = isPaidInfo.getQrCode();
 
         if(customerPaymentToken.isPaid(qrCode)){
-            return "completed";
+            return "true";
         }
 
-        return "not completed";
+        return "false";
     }
 
 
