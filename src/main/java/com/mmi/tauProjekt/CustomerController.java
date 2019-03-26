@@ -32,7 +32,6 @@ public class CustomerController {
     private CustomerList list;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private PriceList plist = new PriceList();
-    @Autowired
     private CustomerPaymentToken customerPaymentToken;
 
     public CustomerController(CustomerList list,
@@ -169,7 +168,7 @@ public class CustomerController {
     private String getQrCode(@RequestHeader("Authorization") String token) {
         String customerId = tokenToCustomerIdParser(token);
         String qrCode = customerPaymentToken.getPaymentToken(customerId);
-        System.out.println(qrCode);
+
         return qrCode;
     }
 
@@ -205,20 +204,21 @@ public class CustomerController {
     }
 
 
-    //Client her saniye kontrol eder
-    //i
+
     @RequestMapping(value = "/is-paid", method = RequestMethod.POST)
-    public String isQrPaid(@RequestBody IsPaidInfo isPaidInfo){
+    public String isQrPaid(@RequestBody IsPaidInfo isPaidInfo,  @RequestHeader("Authorization") String token){
 
         String qrCode = isPaidInfo.getQrCode();
-        System.out.println(customerPaymentToken.isPaid(qrCode));
 
         if(customerPaymentToken.isPaid(qrCode)){
-            return "true";
+            return "completed";
         }
 
-        return "false";
+        return "not completed";
     }
+
+
+
 
 
 
