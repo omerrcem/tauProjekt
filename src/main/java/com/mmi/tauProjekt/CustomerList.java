@@ -19,8 +19,8 @@ public class CustomerList {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     ArrayList<Customer> list = new ArrayList(Arrays.asList(
-            new Customer("160503133","omercem","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass")),
-            new Customer("160503134", "alp","alp@gmail.com",bCryptPasswordEncoder.encode("pass123"))
+            new Customer("160503133","omer cem turan","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass")),
+            new Customer("160503134", "alp akyuz","alp@gmail.com",bCryptPasswordEncoder.encode("pass123"))
     ));
 
     public CustomerList() {

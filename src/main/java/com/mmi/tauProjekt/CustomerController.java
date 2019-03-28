@@ -74,6 +74,33 @@ public class CustomerController {
     }
 
 
+    //Kullanici adini ister ve gizlenmis br sekilde gonderir
+    //
+    @RequestMapping(value = "/get-name",method = RequestMethod.POST)
+    public String getName( @RequestHeader("Authorization") String token, @RequestBody IdInfo idInfo){
+
+        Customer s = list.getCustomer(idInfo.getId());
+
+        if (s==null){
+            throw  new UsernameNotFoundException(idInfo.getId());
+        }
+
+
+        String name = s.getName();
+        char[] nameArray = name.toCharArray();
+
+        for (int i = 1; i <nameArray.length ; i++) {
+
+            if (nameArray[i] == ' '){
+                i++;
+                continue;
+            }else {
+                nameArray[i] = '*';
+            }
+
+        }
+        return new String(nameArray);
+    }
 
 
 
@@ -317,5 +344,13 @@ class IsPaidInfo{
 
     public String getQrCode() {
         return qrCode;
+    }
+}
+
+class IdInfo{
+    String id;
+
+    public String getId() {
+        return id;
     }
 }

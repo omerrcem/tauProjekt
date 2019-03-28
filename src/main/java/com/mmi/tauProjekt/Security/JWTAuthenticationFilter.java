@@ -18,7 +18,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.*;
@@ -58,6 +60,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
+
+        System.out.println("User logged in: " + ((User) auth.getPrincipal()).getUsername() + " " +
+                new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+                .format(Calendar.getInstance().getTime()));
 
         JwtBuilder token = Jwts.builder()
                 .setSubject(((User) auth.getPrincipal()).getUsername())
