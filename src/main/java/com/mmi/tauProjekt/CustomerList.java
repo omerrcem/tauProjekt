@@ -19,8 +19,8 @@ public class CustomerList {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     ArrayList<Customer> list = new ArrayList(Arrays.asList(
-            new Customer("160503133","omer cem turan","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
-            new Customer("160503134", "Alp Akyüz","e160503134@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503133","Ömercem Turan","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503134","Alp Akyüz","e160503134@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
             new Customer("160501101","Kübra Üstün","e160501101@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
             new Customer("160503117","Gamze Fıçı","gamzef883@gmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
             new Customer("160503129","Beyza Patlican","e160503129@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
@@ -38,6 +38,7 @@ public class CustomerList {
         list.add(s);
     }
 
+
     //Ogrenci bulup getirir
     public Customer getCustomer(String id){
         for (Customer s: list) {
@@ -47,6 +48,7 @@ public class CustomerList {
         }
         return null;
     }
+
 
     //Bu fonksiyon clienta gonderilecek olan ogrenci json dosyasnin sifre icermemesi icin
     //tamamen guvenlik icin
@@ -74,6 +76,5 @@ public class CustomerList {
         }
 
     }
-
 
 }

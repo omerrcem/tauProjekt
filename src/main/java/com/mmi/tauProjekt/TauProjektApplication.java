@@ -22,9 +22,6 @@ public class TauProjektApplication {
 	@Bean
 	public CustomerList customerList(){return new CustomerList();}
 
-	//Admin listesi burada oluşturulur
-	@Bean
-	public AdminList adminList(){return new AdminList();}
 
 	//Odeme islemi icin anlik ozel kod ureten sinif
 	@Bean
