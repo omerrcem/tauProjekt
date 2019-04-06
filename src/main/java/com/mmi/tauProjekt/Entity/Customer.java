@@ -9,8 +9,10 @@ public class Customer {
     private String name;
     private String mail;
     private String password;
+    private String status;
 
-    private int balance = 0;
+    private int balanceMensa = 0;
+    private int balanceShuttle = 0;
     public Customer(){
 
     }
@@ -20,11 +22,12 @@ public class Customer {
         this.password = password;
     }
 
-    public Customer(String id, String name, String mail, String password) {
+    public Customer(String id, String name, String mail, String password, String status) {
         this.id = id;
         this.name = name;
         this.mail = mail;
         this.password = password;
+        this.status = status;
     }
 
 
@@ -70,11 +73,27 @@ public class Customer {
         this.password = password;
     }
 
-    public int getBalance() {
-        return balance;
+    public String getStatus() {
+        return status;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getBalanceMensa() {
+        return balanceMensa;
+    }
+
+    public void setBalanceMensa(int balanceMensa) {
+        this.balanceMensa = balanceMensa;
+    }
+
+    public int getBalanceShuttle() {
+        return balanceShuttle;
+    }
+
+    public void setBalanceShuttle(int balanceShuttle) {
+        this.balanceShuttle = balanceShuttle;
     }
 }

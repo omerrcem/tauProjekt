@@ -4,6 +4,7 @@ import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 //Uygulama buradan baslar
@@ -28,6 +29,11 @@ public class TauProjektApplication {
 	//Odeme islemi icin anlik ozel kod ureten sinif
 	@Bean
 	public CustomerPaymentToken customerPaymentToken(){return new CustomerPaymentToken();}
+
+
+
+
+
 
 
 	public static void main(String[] args) {

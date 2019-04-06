@@ -2,6 +2,7 @@ package com.mmi.tauProjekt;
 
 import com.google.zxing.WriterException;
 import com.mmi.tauProjekt.Entity.Customer;
+import com.mmi.tauProjekt.Mail.MailService;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.QrCode.QrCodeGenerator;
 import io.jsonwebtoken.Jwts;
@@ -12,13 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Random;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
 import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
@@ -28,18 +33,26 @@ import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+
     @Autowired
     private CustomerList list;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private PriceList plist = new PriceList();
     private CustomerPaymentToken customerPaymentToken;
+    private MailService mailService;
+
 
     public CustomerController(CustomerList list,
-                             BCryptPasswordEncoder bCryptPasswordEncoder, CustomerPaymentToken customerPaymentToken) {
+                             BCryptPasswordEncoder bCryptPasswordEncoder,
+                              CustomerPaymentToken customerPaymentToken,
+                              MailService mailService) {
         this.list = list;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
+        this.mailService = mailService;
     }
+
+
 
 
 
@@ -60,6 +73,8 @@ public class CustomerController {
 
 
 
+
+
     //Ogrenci bilgisini geitrmek için method
     //Gonderilen json dosyası sadece jwt token içermeli
     //Ogrenci sinfini sifresi silinmis bir sekilde geri dondurur
@@ -72,6 +87,8 @@ public class CustomerController {
         }
         return s;
     }
+
+
 
 
     //Kullanici adini ister ve gizlenmis br sekilde gonderir
@@ -89,10 +106,10 @@ public class CustomerController {
         String name = s.getName();
         char[] nameArray = name.toCharArray();
 
-        for (int i = 1; i <nameArray.length ; i++) {
+        for (int i = 2; i <nameArray.length ; i++) {
 
             if (nameArray[i] == ' '){
-                i++;
+                i= i+2;
                 continue;
             }else {
                 nameArray[i] = '*';
@@ -105,22 +122,47 @@ public class CustomerController {
 
 
 
-    //Odeme methodu
+    //Test Odeme methodu normalde odeme islemi qr kod uzerinden oluyor
     //gonderen kisi bir json dosyasına bir jwt token, nereye odedigini
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token) throws CustomException {
-        int priceAmount = plist.getPrice(pt.priceId);
+        int priceAmount = plist.getPrice(pt.getPriceId());
+        String priceId = pt.getPriceId();
+
             if (priceAmount == -1){
                 return "price not found";
             }
         String customerId = tokenToCustomerIdParser(token);
-        if (list.getCustomer(customerId).getBalance()>priceAmount){
-            list.getCustomer(customerId).setBalance( list.getCustomer(customerId).getBalance() - priceAmount);
-            return "paid successfully";
-        }else {
-           return "insufficient balance";
+
+        switch (priceId) {
+
+            case "mensa":
+
+                if (list.getCustomer(customerId).getBalanceMensa()>priceAmount){
+                    list.getCustomer(customerId).setBalanceMensa( list.getCustomer(customerId).getBalanceMensa() - priceAmount);
+                    return "paid successfully";
+                }else {
+                    return "insufficient balance";
+                }
+
+            case "shuttle":
+
+                if (list.getCustomer(customerId).getBalanceShuttle()>priceAmount){
+                    list.getCustomer(customerId).setBalanceShuttle( list.getCustomer(customerId).getBalanceShuttle() - priceAmount);
+                    return "paid successfully";
+                }else {
+                    return "insufficient balance";
+                }
+
+
+            default:
+                return "price not found";
 
         }
+
+
+
+
     }
 
 
@@ -129,8 +171,9 @@ public class CustomerController {
     //Para yukleme methodu
     //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
     @RequestMapping(value = "/deposit", method = RequestMethod.POST)
-    public String deopsit(@RequestHeader("Authorization") String token, @RequestBody MoneyInfo moneyInfo){
-        int amount = moneyInfo.getAmount();
+    public String deopsit(@RequestHeader("Authorization") String token, @RequestBody DepositInfo depositInfo){
+        String balanceId = depositInfo.getBalanceId();
+        int amount = depositInfo.getAmount();
         String customerId = tokenToCustomerIdParser(token);
 
         Customer r = list.getCustomer(customerId);
@@ -138,8 +181,23 @@ public class CustomerController {
             throw new UsernameNotFoundException(customerId);
         }
 
-        r.setBalance( r.getBalance() + amount);
-        return ("deposited successfully");
+        switch (balanceId){
+
+            case"mensa":
+                r.setBalanceMensa( r.getBalanceMensa() + amount);
+                return ("deposited successfully");
+
+
+            case "shuttle":
+                r.setBalanceShuttle( r.getBalanceShuttle() + amount);
+                return ("deposited successfully");
+
+
+            default:
+                return ("balance not found");
+
+        }
+
     }
 
 
@@ -153,6 +211,7 @@ public class CustomerController {
     public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException {
         String sender = tokenToCustomerIdParser(token);
         String receiver = mti.getReceiverId();
+        String balanceId = mti.getBalanceId();
         int amount = mti.getAmount();
 
         Customer r = list.getCustomer(receiver);
@@ -160,15 +219,37 @@ public class CustomerController {
             throw new UsernameNotFoundException(receiver);
         }
 
-        if (list.getCustomer(sender).getBalance() > amount){
-            list.getCustomer(sender).setBalance( list.getCustomer(sender).getBalance() - amount);
-            list.getCustomer(receiver).setBalance(list.getCustomer(receiver).getBalance() + amount);
-        return "transfered successfully";
-        }else {
-            return "insufficient balance";
+        switch (balanceId) {
+
+            case "mensa":
+
+                if (list.getCustomer(sender).getBalanceMensa() > amount){
+                    list.getCustomer(sender).setBalanceMensa( list.getCustomer(sender).getBalanceMensa() - amount);
+                    list.getCustomer(receiver).setBalanceMensa(list.getCustomer(receiver).getBalanceMensa() + amount);
+                    return "transfered successfully";
+                }else {
+                    return "insufficient balance";
+
+                }
+
+            case "shuttle":
+
+                if (list.getCustomer(sender).getBalanceShuttle() > amount){
+                    list.getCustomer(sender).setBalanceShuttle( list.getCustomer(sender).getBalanceShuttle() - amount);
+                    list.getCustomer(receiver).setBalanceShuttle(list.getCustomer(receiver).getBalanceShuttle() + amount);
+                    return "transfered successfully";
+                }else {
+                    return "insufficient balance";
+
+                }
+
+            default:
+                return "balance not found";
 
         }
     }
+
+
 
 
     //Sifre degistirme methodu
@@ -190,7 +271,6 @@ public class CustomerController {
     //Odeme QrCode uretmek icin method
     //Aybuke uuid generator ile birlestirildi
     //S
-    //
     @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST)
     private String getQrCode(@RequestHeader("Authorization") String token) {
         String customerId = tokenToCustomerIdParser(token);
@@ -198,8 +278,6 @@ public class CustomerController {
         System.out.println(qrCode+ " für "+ customerId);
         return qrCode;
     }
-
-
 
 
 
@@ -215,20 +293,38 @@ public class CustomerController {
         if (customerId!=null){
 
             int priceAmount = plist.getPrice(priceId);
-            if (priceAmount == -1){
-                return "price not found";
-            }
-            if (list.getCustomer(customerId).getBalance()>priceAmount){
-                list.getCustomer(customerId).setBalance( list.getCustomer(customerId).getBalance() - priceAmount);
-                return "paid successfully";
-            }else {
-                return "insufficient balance";
+
+            switch (priceId) {
+
+                case "mensa":
+
+                            if (list.getCustomer(customerId).getBalanceMensa()>priceAmount){
+                                list.getCustomer(customerId).setBalanceMensa( list.getCustomer(customerId).getBalanceMensa() - priceAmount);
+                                return "paid successfully";
+                            }else {
+                                return "insufficient balance";
+                            }
+
+                case "shuttle":
+
+                            if (list.getCustomer(customerId).getBalanceShuttle()>priceAmount){
+                                list.getCustomer(customerId).setBalanceShuttle( list.getCustomer(customerId).getBalanceShuttle() - priceAmount);
+                                return "paid successfully";
+                            }else {
+                                return "insufficient balance";
+                            }
+
+
+                default:
+                             return "price not found";
 
             }
+
         }else {
             return "qr code not found";
         }
     }
+
 
 
 
@@ -244,6 +340,53 @@ public class CustomerController {
         return "false";
     }
 
+
+
+
+
+
+    //TODO: Gamze Empfehlen
+
+
+
+
+    //Sifre unuttum kismi
+    //Kullanici token olmadan bir musteri IDsi yollar, eger boyle bir kullanici var ise mail gonderir
+    //ve donus olarak hangi maile gonderdigini String olarak yollar
+    @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
+    private String forgotPassword(@RequestBody IdInfo idInfo) throws MessagingException {
+
+        Customer customer = list.getCustomer(idInfo.getId());
+        if (customer == null){
+            throw new UsernameNotFoundException(idInfo.getId());
+        }
+        String mail = customer.getMail();
+
+        String newPass = getSaltString();
+
+        //Burada maili atar
+        mailService.sendEmail("support@tau-pay.com",mail,"Password Recovery",
+                            "Hi "+customer.getName()+",<br><br>"
+                                    +"Your new generated password is: "+"<b> "+newPass+" </b><br>"
+                                    +"This mail has been sent automatically, please do not reply.<br>"
+                                    +"Tau-Pay Support");
+
+        customer.setPassword(bCryptPasswordEncoder.encode(newPass));
+
+
+        char[] nameArray = mail.toCharArray();
+
+        for (int i = 3; i <nameArray.length ; i++) {
+
+           if (nameArray[i] == '@'){
+               break;
+           }
+           nameArray[i]='*';
+        }
+
+
+        return new String(nameArray);
+    }
 
 
 
@@ -265,6 +408,26 @@ public class CustomerController {
                 .getSubject();
         return Customer;
     }
+
+
+
+
+
+    //Random sifre uretir
+    protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 7) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
+
+
 /*
     @Bean
     public CustomerList list(){
@@ -277,12 +440,13 @@ public class CustomerController {
 //Para Transferi bilgilerini saklamak için gecici sinif
 class moneyTransferInfo{
     String receiverId;
+    String balanceId;
     int amount;
 
     public String getReceiverId() {
         return receiverId;
     }
-
+    public String getBalanceId(){return balanceId;}
     public int getAmount() {
         return amount;
     }
@@ -299,9 +463,11 @@ class PayType{
 }
 
 //Para yukleme methodu icin gecici sinif
-class MoneyInfo{
+class DepositInfo{
+    String balanceId;
     int amount;
 
+    public String getBalanceId(){return balanceId;}
     public int getAmount() {
         return amount;
     }
@@ -339,6 +505,7 @@ class QrCodeJsonParser{
 
 }
 
+//Odendi mi sorgusu icin json sinifi
 class IsPaidInfo{
     String qrCode;
 
@@ -347,6 +514,8 @@ class IsPaidInfo{
     }
 }
 
+
+//Id bilgisini iceren sinif json icindir
 class IdInfo{
     String id;
 
@@ -354,3 +523,4 @@ class IdInfo{
         return id;
     }
 }
+

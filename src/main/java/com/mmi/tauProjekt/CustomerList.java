@@ -19,11 +19,18 @@ public class CustomerList {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     ArrayList<Customer> list = new ArrayList(Arrays.asList(
-            new Customer("160503133","omer cem turan","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass")),
-            new Customer("160503134", "alp akyuz","alp@gmail.com",bCryptPasswordEncoder.encode("pass123"))
+            new Customer("160503133","omer cem turan","omercemturan@gmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503134", "Alp Akyüz","e160503134@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160501101","Kübra Üstün","e160501101@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503117","Gamze Fıçı","gamzef883@gmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503129","Beyza Patlican","e160503129@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("170503101","Sedat Hatip","e170503101@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("160503139","Nusret Özateş","e160503139@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("170503104","Muhammed Zahid Bozkuş","e170503104@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student")
+
     ));
 
-    public CustomerList() {
+    public CustomerList(){
     }
 
 
@@ -50,7 +57,8 @@ public class CustomerList {
                 message.setName(s.getName());
                 message.setPassword("");
                 message.setId(s.getId());
-                message.setBalance(s.getBalance());
+                message.setBalanceMensa(s.getBalanceMensa());
+                message.setBalanceShuttle(s.getBalanceShuttle());
                 message.setMail(s.getMail());
                 return message;
             }
