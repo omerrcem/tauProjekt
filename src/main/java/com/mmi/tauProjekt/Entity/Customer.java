@@ -11,8 +11,10 @@ public class Customer {
     private String password;
     private String status;
 
-    private int balanceMensa = 0;
-    private int balanceShuttle = 0;
+    private boolean canGetFreeItem = false;
+
+    private double balanceMensa = 0;
+    private double balanceShuttle = 0;
     public Customer(){
 
     }
@@ -81,19 +83,27 @@ public class Customer {
         this.status = status;
     }
 
-    public int getBalanceMensa() {
+    public double getBalanceMensa() {
         return balanceMensa;
     }
 
-    public void setBalanceMensa(int balanceMensa) {
+    public void setBalanceMensa(double balanceMensa) {
         this.balanceMensa = balanceMensa;
     }
 
-    public int getBalanceShuttle() {
+    public double getBalanceShuttle() {
         return balanceShuttle;
     }
 
-    public void setBalanceShuttle(int balanceShuttle) {
+    public void setBalanceShuttle(double balanceShuttle) {
         this.balanceShuttle = balanceShuttle;
+    }
+
+    public boolean isCanGetFreeItem() {
+        return canGetFreeItem;
+    }
+
+    public void setCanGetFreeItem(boolean canGetFreeItem) {
+        this.canGetFreeItem = canGetFreeItem;
     }
 }

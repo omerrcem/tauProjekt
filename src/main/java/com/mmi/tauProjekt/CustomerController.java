@@ -1,28 +1,18 @@
 package com.mmi.tauProjekt;
 
-import com.google.zxing.WriterException;
 import com.mmi.tauProjekt.Entity.Customer;
+import com.mmi.tauProjekt.Lists.PriceList;
+import com.mmi.tauProjekt.Lists.RecommendList;
+import com.mmi.tauProjekt.Lists.CustomerList;
 import com.mmi.tauProjekt.Mail.MailService;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
-import com.mmi.tauProjekt.QrCode.QrCodeGenerator;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.Random;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
@@ -40,16 +30,19 @@ public class CustomerController {
     private PriceList plist = new PriceList();
     private CustomerPaymentToken customerPaymentToken;
     private MailService mailService;
+    private RecommendList listRecommend;
 
 
     public CustomerController(CustomerList list,
                              BCryptPasswordEncoder bCryptPasswordEncoder,
                               CustomerPaymentToken customerPaymentToken,
-                              MailService mailService) {
+                              MailService mailService,
+                              RecommendList listRecommend) {
         this.list = list;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
         this.mailService = mailService;
+        this.listRecommend = listRecommend;
     }
 
 
@@ -126,20 +119,19 @@ public class CustomerController {
     //gonderen kisi bir json dosyasına bir jwt token, nereye odedigini
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token) throws CustomException {
-        int priceAmount = plist.getPrice(pt.getPriceId());
-        String priceId = pt.getPriceId();
 
-            if (priceAmount == -1){
-                return "price not found";
-            }
+        String priceId = pt.getPriceId();
         String customerId = tokenToCustomerIdParser(token);
+        Customer customer = list.getCustomer(customerId);
+
+        double priceAmount = plist.getPrice(customer.getStatus(),pt.getPriceId());
 
         switch (priceId) {
 
             case "mensa":
 
-                if (list.getCustomer(customerId).getBalanceMensa()>priceAmount){
-                    list.getCustomer(customerId).setBalanceMensa( list.getCustomer(customerId).getBalanceMensa() - priceAmount);
+                if (customer.getBalanceMensa()>priceAmount){
+                    customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
                     return "paid successfully";
                 }else {
                     return "insufficient balance";
@@ -147,8 +139,8 @@ public class CustomerController {
 
             case "shuttle":
 
-                if (list.getCustomer(customerId).getBalanceShuttle()>priceAmount){
-                    list.getCustomer(customerId).setBalanceShuttle( list.getCustomer(customerId).getBalanceShuttle() - priceAmount);
+                if (customer.getBalanceShuttle()>priceAmount){
+                    customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
                     return "paid successfully";
                 }else {
                     return "insufficient balance";
@@ -289,17 +281,18 @@ public class CustomerController {
         String qrCode =qrCodeJsonParser.getQrCode();
         String priceId = qrCodeJsonParser.getPriceId();
         String customerId = customerPaymentToken.confirmPaymentToken(qrCode);
+        Customer customer = list.getCustomer(customerId);
 
         if (customerId!=null){
 
-            int priceAmount = plist.getPrice(priceId);
+            double priceAmount = plist.getPrice(customer.getStatus(),priceId);
 
             switch (priceId) {
 
                 case "mensa":
 
-                            if (list.getCustomer(customerId).getBalanceMensa()>priceAmount){
-                                list.getCustomer(customerId).setBalanceMensa( list.getCustomer(customerId).getBalanceMensa() - priceAmount);
+                            if (customer.getBalanceMensa()>priceAmount){
+                                customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
                                 return "paid successfully";
                             }else {
                                 return "insufficient balance";
@@ -307,8 +300,8 @@ public class CustomerController {
 
                 case "shuttle":
 
-                            if (list.getCustomer(customerId).getBalanceShuttle()>priceAmount){
-                                list.getCustomer(customerId).setBalanceShuttle( list.getCustomer(customerId).getBalanceShuttle() - priceAmount);
+                            if (customer.getBalanceShuttle()>priceAmount){
+                                customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
                                 return "paid successfully";
                             }else {
                                 return "insufficient balance";
@@ -345,7 +338,41 @@ public class CustomerController {
 
 
 
-    //TODO: Gamze Empfehlen
+    @RequestMapping(value = "/feedback", method = RequestMethod.POST)
+    public String feedback(@RequestBody FeedbackInfo feedbackInfo, @RequestHeader("Authorization") String token){
+
+        String customerId = tokenToCustomerIdParser(token);
+        int star = feedbackInfo.getStar();
+        String text = feedbackInfo.getText();
+
+        //TODO: Aybuke sinif yazip entegre edecek
+        //listFeedback.addFeedback(star,text);
+
+
+        return "feedback successfully sent";
+    }
+
+
+
+
+    //TODO: Recommend sinifi entegre edilecek
+    //Kullanici bir kisi onermek icin bu fonksiyonu cagirir
+    //Json icinde bir id olması ve yaninda token gonderilmesi gerekir
+    @RequestMapping(value = "/recommend", method = RequestMethod.POST)
+    public String recommend(@RequestBody IdInfo idInfo, @RequestHeader("Authorization") String token){
+
+        String customerId = tokenToCustomerIdParser(token);
+        Customer c = list.getCustomer(customerId);
+
+        if (c == null){
+            throw new UsernameNotFoundException(customerId);
+        }
+
+        //TODO: yazilacak sinifi empfehlen ekleme methodu
+        listRecommend.addRecommend(customerId);
+
+        return "recommended successfully";
+    }
 
 
 
@@ -521,6 +548,20 @@ class IdInfo{
 
     public String getId() {
         return id;
+    }
+}
+
+//Feedback bilgisini tasiyan sinif
+class FeedbackInfo{
+    int star;
+    String text;
+
+    public int getStar() {
+        return star;
+    }
+
+    public String getText() {
+        return text;
     }
 }
 

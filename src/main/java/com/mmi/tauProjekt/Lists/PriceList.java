@@ -1,4 +1,4 @@
-package com.mmi.tauProjekt;
+package com.mmi.tauProjekt.Lists;
 
 import com.mmi.tauProjekt.Entity.Price;
 
@@ -14,17 +14,19 @@ public class PriceList {
 
     ArrayList<Price> prices = new ArrayList(Arrays.asList(
 
-            new Price("mensa", 4),
-            new Price ("shuttle", 2)
+            new Price("mensa","Student", 3.5),
+            new Price("mensa","Personal", 4),
+            new Price ("shuttle","Student", 2),
+            new Price ("shuttle","Personal", 2)
     ));
 
     public PriceList(){ }
 
-    public int getPrice(String id){
+    public double getPrice(String status,String id){
 
         for(Price p : prices){
 
-            if (p.getId().equals(id)){
+            if (p.getId().equals(id) && p.getCustomerStatus().equals(status)){
                 return p.getPrice();
             }
 

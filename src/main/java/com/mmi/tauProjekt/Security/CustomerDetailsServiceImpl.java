@@ -1,10 +1,9 @@
 package com.mmi.tauProjekt.Security;
 
-import com.mmi.tauProjekt.CustomerList;
+import com.mmi.tauProjekt.Lists.CustomerList;
 import com.mmi.tauProjekt.Entity.Customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,10 +1,12 @@
 package com.mmi.tauProjekt;
 
+import com.mmi.tauProjekt.Lists.RecommendList;
+import com.mmi.tauProjekt.Lists.CustomerList;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
+import com.mmi.tauProjekt.StartUp.StartMessage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 //Uygulama buradan baslar
@@ -27,13 +29,15 @@ public class TauProjektApplication {
 	@Bean
 	public CustomerPaymentToken customerPaymentToken(){return new CustomerPaymentToken();}
 
-
+	@Bean
+	public RecommendList recommendList(){return new RecommendList();}
 
 
 
 
 
 	public static void main(String[] args) {
+		System.out.println(StartMessage.welcomeMessage());
 		SpringApplication.run(TauProjektApplication.class, args);
 	}
 
