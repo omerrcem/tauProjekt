@@ -44,26 +44,35 @@ public class CustomerPaymentToken {
 
 
     //Client her saniye odeme yapilip yapilmadigini kontrol eder
-    public boolean isPaid(String qrcode){
+    public String isPaid(String qrcode){
 
         if (userTokens.containsKey(qrcode)){
-            return userTokens.get(qrcode).isPaid;
+            return userTokens.get(qrcode).paymentStatus;
         }else {
-            return false;
+            return "qr code not found";
         }
     }
 
 
+    public String getCustomerId(String uuid){
+        if (userTokens.containsKey(uuid)) {
+            String customerId = userTokens.get(uuid).getId();
+            return customerId;
+        }
+        return null;
+
+    }
 
 
 
     //Barkod okuyucudan gelen kod burada var mi diye kontrol edilir
     //
-    public String confirmPaymentToken(String qrcode) {
+    public String confirmPaymentToken(String qrcode, String answer) {
 
-        if (userTokens.containsKey(qrcode) && !userTokens.get(qrcode).isPaid) {
-            userTokens.get(qrcode).isPaid = true;
-            System.out.println("paid!");
+        if (userTokens.containsKey(qrcode) && userTokens.get(qrcode).paymentStatus.equals("not paid")) {
+
+            userTokens.get(qrcode).paymentStatus = answer;
+            System.out.println(answer);
             return userTokens.get(qrcode).getId();
         } else {
             return null;
@@ -87,7 +96,8 @@ public class CustomerPaymentToken {
 
 class PaymentInfo{
     String id;
-    boolean isPaid = false;
+    //boolean isPaid = false;
+    String paymentStatus = "not paid";
     Date createDate;
 
     public PaymentInfo(String id){

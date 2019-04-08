@@ -65,9 +65,6 @@ public class CustomerController {
 
 
 
-
-
-
     //Ogrenci bilgisini geitrmek için method
     //Gonderilen json dosyası sadece jwt token içermeli
     //Ogrenci sinfini sifresi silinmis bir sekilde geri dondurur
@@ -196,7 +193,6 @@ public class CustomerController {
 
 
 
-
     //Para yollama methodu
     //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
@@ -259,7 +255,6 @@ public class CustomerController {
 
 
 
-
     //Odeme QrCode uretmek icin method
     //Aybuke uuid generator ile birlestirildi
     //S
@@ -280,12 +275,14 @@ public class CustomerController {
     private String sendQrCode(@RequestBody QrCodeJsonParser qrCodeJsonParser){
         String qrCode =qrCodeJsonParser.getQrCode();
         String priceId = qrCodeJsonParser.getPriceId();
-        String customerId = customerPaymentToken.confirmPaymentToken(qrCode);
+        String customerId = customerPaymentToken.getCustomerId(qrCode);
         Customer customer = list.getCustomer(customerId);
 
         if (customerId!=null){
 
             double priceAmount = plist.getPrice(customer.getStatus(),priceId);
+
+            String answer;
 
             switch (priceId) {
 
@@ -293,25 +290,33 @@ public class CustomerController {
 
                             if (customer.getBalanceMensa()>priceAmount){
                                 customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
-                                return "paid successfully";
+                                answer="paid successfully";
+                                break;
                             }else {
-                                return "insufficient balance";
+                                answer = "insufficient balance";
+                                break;
                             }
 
                 case "shuttle":
 
                             if (customer.getBalanceShuttle()>priceAmount){
                                 customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
-                                return "paid successfully";
+                                answer = "paid successfully";
+                                break;
                             }else {
-                                return "insufficient balance";
+                                answer = "insufficient balance";
+                                break;
                             }
 
 
                 default:
-                             return "price not found";
+                            answer= "price not found";
+                            break;
+
 
             }
+            customerPaymentToken.confirmPaymentToken(qrCode,answer);
+            return answer;
 
         }else {
             return "qr code not found";
@@ -326,14 +331,8 @@ public class CustomerController {
 
         String qrCode = isPaidInfo.getQrCode();
 
-        if(customerPaymentToken.isPaid(qrCode)){
-            return "true";
-        }
-
-        return "false";
+       return customerPaymentToken.isPaid(qrCode);
     }
-
-
 
 
 
@@ -414,8 +413,6 @@ public class CustomerController {
 
         return new String(nameArray);
     }
-
-
 
 
 
