@@ -1,6 +1,7 @@
 package com.mmi.tauProjekt;
 
 import com.mmi.tauProjekt.Entity.Customer;
+import com.mmi.tauProjekt.Lists.FeedbackList;
 import com.mmi.tauProjekt.Lists.PriceList;
 import com.mmi.tauProjekt.Lists.RecommendList;
 import com.mmi.tauProjekt.Lists.CustomerList;
@@ -31,18 +32,21 @@ public class CustomerController {
     private CustomerPaymentToken customerPaymentToken;
     private MailService mailService;
     private RecommendList listRecommend;
+    private FeedbackList feedbackList;
 
 
     public CustomerController(CustomerList list,
                              BCryptPasswordEncoder bCryptPasswordEncoder,
                               CustomerPaymentToken customerPaymentToken,
                               MailService mailService,
-                              RecommendList listRecommend) {
+                              RecommendList listRecommend,
+                              FeedbackList feedbackList) {
         this.list = list;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
         this.mailService = mailService;
         this.listRecommend = listRecommend;
+        this.feedbackList=feedbackList;
     }
 
 
@@ -345,7 +349,7 @@ public class CustomerController {
         String text = feedbackInfo.getText();
 
         //TODO: Aybuke sinif yazip entegre edecek
-        //listFeedback.addFeedback(star,text);
+        feedbackList.addFeedback(customerId,star,text);
 
 
         return "feedback successfully sent";

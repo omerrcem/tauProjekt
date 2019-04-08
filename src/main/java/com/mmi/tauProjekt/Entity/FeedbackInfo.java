@@ -1,5 +1,4 @@
-
-package feedbackınfo;
+package com.mmi.tauProjekt.Entity;
 
 import java.util.ArrayList;
 
@@ -14,6 +13,7 @@ public class FeedbackInfo {
         this.id = id;
         this.star = star;
         this.feedbackText = feedbackText;
+        System.out.println("Feedback eklendi");
     }
       
       

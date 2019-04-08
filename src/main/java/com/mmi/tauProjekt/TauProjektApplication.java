@@ -1,5 +1,6 @@
 package com.mmi.tauProjekt;
 
+import com.mmi.tauProjekt.Lists.FeedbackList;
 import com.mmi.tauProjekt.Lists.RecommendList;
 import com.mmi.tauProjekt.Lists.CustomerList;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
@@ -32,7 +33,8 @@ public class TauProjektApplication {
 	@Bean
 	public RecommendList recommendList(){return new RecommendList();}
 
-
+	@Bean
+	public FeedbackList feedbackList(){return new FeedbackList();}
 
 
 
