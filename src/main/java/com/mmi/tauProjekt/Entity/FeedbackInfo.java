@@ -1,21 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package feedbackınfo;
 
-/**
- *
- * @author Asus
- */
-public class FeedbackInfo {
+import java.util.ArrayList;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+
+public class FeedbackInfo {
+    
+      String id;
+      int star;
+      String feedbackText;
+
+    public FeedbackInfo(String id, int star, String feedbackText) {
+        this.id = id;
+        this.star = star;
+        this.feedbackText = feedbackText;
     }
+      
+      
+      public String getId() {
+          return id;
+      }
+      public void setId(String id) {
+          this.id=id;
+      }
+      public int getStar() {
+          return star;
+      }
+      public void setStar(int star) {
+          this.star=star;
+      }
+      public String getFeedbackText() {
+          return feedbackText;
+          
+      }
+      public void setFeedbacktext(String feedbackText) {
+          this.feedbackText=feedbackText;
+      }
+    
+   
     
 }

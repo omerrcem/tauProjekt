@@ -1,14 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package feedbackınfo;
 
-/**
- *
- * @author Asus
- */
+import java.util.ArrayList;
+
+
 public class FeedbackList {
     
+    ArrayList<FeedbackInfo> feedbackList = new ArrayList();
+    
+    
+    public void addFeedback(String id,int star,String feedbackText) {
+        FeedbackInfo infos= new FeedbackInfo(id,star,feedbackText);
+        feedbackList.add(infos);
+       
+    }
 }
