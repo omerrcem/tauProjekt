@@ -27,7 +27,8 @@ public class CustomerList {
             new Customer("170503101","Sedat Hatip","e170503101@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
             new Customer("160503139","Nusret Özateş","e160503139@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
             new Customer("170503104","Muhammed Zahid Bozkuş","e170503104@stud.tau.edu.tr",bCryptPasswordEncoder.encode("pass"),"Student"),
-            new Customer("160503111","Aybüke Bayramiç","aybuke-52@hotmail.com",bCryptPasswordEncoder.encode("pass"),"Student")
+            new Customer("160503111","Aybüke Bayramiç","aybuke-52@hotmail.com",bCryptPasswordEncoder.encode("pass"),"Student"),
+            new Customer("1234","Dr.Zeynep Tuncer","tuncer@posteo.de",bCryptPasswordEncoder.encode("pass1"),"Personal")
 
     ));
 
