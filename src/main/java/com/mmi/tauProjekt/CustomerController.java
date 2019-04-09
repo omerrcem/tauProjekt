@@ -1,12 +1,12 @@
 package com.mmi.tauProjekt;
 
 import com.mmi.tauProjekt.Entity.Customer;
-import com.mmi.tauProjekt.Lists.FeedbackList;
-import com.mmi.tauProjekt.Lists.PriceList;
-import com.mmi.tauProjekt.Lists.RecommendList;
-import com.mmi.tauProjekt.Lists.CustomerList;
+import com.mmi.tauProjekt.Entity.Price;
+import com.mmi.tauProjekt.Entity.Recommend;
+import com.mmi.tauProjekt.Entity.Transaction;
 import com.mmi.tauProjekt.Mail.MailService;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
+import com.mmi.tauProjekt.Repository.*;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.util.Random;
+import java.util.*;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
 import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
@@ -26,27 +26,34 @@ import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
 public class CustomerController {
 
     @Autowired
-    private CustomerList list;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private PriceList plist = new PriceList();
     private CustomerPaymentToken customerPaymentToken;
     private MailService mailService;
-    private RecommendList listRecommend;
-    private FeedbackList feedbackList;
+    private CustomerRepository customerRepository;
+    private FeedbackRepository feedbackRepository;
+    private PriceRepository priceRepository;
+    private RecommendRepository recommendRepository;
+    private TransactionRepository transactionRepository;
 
 
-    public CustomerController(CustomerList list,
-                             BCryptPasswordEncoder bCryptPasswordEncoder,
+    public CustomerController(BCryptPasswordEncoder bCryptPasswordEncoder,
                               CustomerPaymentToken customerPaymentToken,
                               MailService mailService,
-                              RecommendList listRecommend,
-                              FeedbackList feedbackList) {
-        this.list = list;
+                              CustomerRepository customerRepository,
+                              FeedbackRepository feedbackRepository,
+                              PriceRepository priceRepository,
+                              RecommendRepository recommendRepository,
+                              TransactionRepository transactionRepository) {
+
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
         this.mailService = mailService;
-        this.listRecommend = listRecommend;
-        this.feedbackList=feedbackList;
+        this.customerRepository=customerRepository;
+        this.feedbackRepository=feedbackRepository;
+        this.priceRepository=priceRepository;
+        this.recommendRepository=recommendRepository;
+        this.transactionRepository=transactionRepository;
     }
 
 
@@ -59,12 +66,13 @@ public class CustomerController {
     //Token gerektirmez
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     public void signUp(@RequestBody Customer s) throws CustomException{
-    if (list.getCustomer(s.getId()) != null){
+        Customer found = customerRepository.findById(s.getId()).orElse(new Customer());
+
+    if (found != null){
         throw new CustomException("CustomerAlreadyExist");
     }
 
-        s.setPassword(bCryptPasswordEncoder.encode(s.getPassword()));
-        list.addCustomer(s);
+        customerRepository.save(s);
     }
 
 
@@ -75,11 +83,23 @@ public class CustomerController {
     @RequestMapping(value = "/get-info",method = RequestMethod.POST)
     public Customer getInfo( @RequestHeader("Authorization") String token){
         String customerId = tokenToCustomerIdParser(token);
-        Customer s = list.getCustomerWithoutPass(customerId);
-        if (s == null) {
+        //Customer s = list.getCustomerWithoutPass(customerId);
+        Customer found = customerRepository.findById(customerId).orElse(new Customer());
+
+        if (found == null) {
             throw new UsernameNotFoundException(customerId);
+        }else {
+            Customer s = new Customer();
+            s.setId(found.getId());
+            s.setName(found.getName());
+            s.setMail(found.getMail());
+            s.setStatus(found.getStatus());
+            s.setBalanceMensa(found.getBalanceMensa());
+            s.setBalanceShuttle(found.getBalanceShuttle());
+            s.setCanGetFreeItem(found.isCanGetFreeItem());
+
+            return s;
         }
-        return s;
     }
 
 
@@ -90,7 +110,8 @@ public class CustomerController {
     @RequestMapping(value = "/get-name",method = RequestMethod.POST)
     public String getName( @RequestHeader("Authorization") String token, @RequestBody IdInfo idInfo){
 
-        Customer s = list.getCustomer(idInfo.getId());
+        String customerId = idInfo.getId();
+        Customer s = customerRepository.findById(customerId).orElse(new Customer());
 
         if (s==null){
             throw  new UsernameNotFoundException(idInfo.getId());
@@ -102,7 +123,7 @@ public class CustomerController {
 
         for (int i = 2; i <nameArray.length ; i++) {
 
-            if (nameArray[i] == ' '){
+            if (nameArray[i] == ' ' || nameArray[i] == '.'){
                 i= i+2;
                 continue;
             }else {
@@ -123,37 +144,47 @@ public class CustomerController {
 
         String priceId = pt.getPriceId();
         String customerId = tokenToCustomerIdParser(token);
-        Customer customer = list.getCustomer(customerId);
+        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
 
-        double priceAmount = plist.getPrice(customer.getStatus(),pt.getPriceId());
 
+        double priceAmount = getPrice(priceId,customer.getStatus());
+        if (priceAmount==-1){
+            return "error with pricing";
+        }
+        String answer;
         switch (priceId) {
 
             case "mensa":
 
                 if (customer.getBalanceMensa()>priceAmount){
                     customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
-                    return "paid successfully";
+                    answer= "paid successfully";
+                    break;
                 }else {
-                    return "insufficient balance";
+                    answer= "insufficient balance";
+                    break;
                 }
 
             case "shuttle":
 
                 if (customer.getBalanceShuttle()>priceAmount){
                     customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
-                    return "paid successfully";
+                    answer= "paid successfully";
+                    break;
                 }else {
-                    return "insufficient balance";
+                    answer= "insufficient balance";
+                    break;
                 }
 
 
             default:
-                return "price not found";
-
+                answer= "price not found";
+                break;
         }
 
-
+        customerRepository.save(customer);
+        logTransaction(customerId,"Pay",answer,priceId,priceAmount  );
+        return answer;
 
 
     }
@@ -169,27 +200,32 @@ public class CustomerController {
         int amount = depositInfo.getAmount();
         String customerId = tokenToCustomerIdParser(token);
 
-        Customer r = list.getCustomer(customerId);
+        Customer r = customerRepository.findById(customerId).orElse(new Customer());
         if (r == null) {
             throw new UsernameNotFoundException(customerId);
         }
+        String answer;
 
         switch (balanceId){
 
             case"mensa":
                 r.setBalanceMensa( r.getBalanceMensa() + amount);
-                return ("deposited successfully");
-
+                answer= ("deposited successfully");
+                break;
 
             case "shuttle":
                 r.setBalanceShuttle( r.getBalanceShuttle() + amount);
-                return ("deposited successfully");
-
+                answer=  ("deposited successfully");
+                break;
 
             default:
-                return ("balance not found");
-
+                answer= ("balance not found");
+                break;
         }
+
+        customerRepository.save(r);
+        logTransaction(customerId,"Deposit",answer,balanceId,amount);
+        return answer;
 
     }
 
@@ -200,45 +236,60 @@ public class CustomerController {
     //Para yollama methodu
     //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
-    public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException {
+    public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException, InterruptedException {
         String sender = tokenToCustomerIdParser(token);
         String receiver = mti.getReceiverId();
         String balanceId = mti.getBalanceId();
         int amount = mti.getAmount();
 
-        Customer r = list.getCustomer(receiver);
+        Customer s = customerRepository.findById(sender).orElse(new Customer());
+        Customer r = customerRepository.findById(receiver).orElse(new Customer());
         if (r == null) {
             throw new UsernameNotFoundException(receiver);
         }
-
+        String answer;
         switch (balanceId) {
 
             case "mensa":
 
-                if (list.getCustomer(sender).getBalanceMensa() > amount){
-                    list.getCustomer(sender).setBalanceMensa( list.getCustomer(sender).getBalanceMensa() - amount);
-                    list.getCustomer(receiver).setBalanceMensa(list.getCustomer(receiver).getBalanceMensa() + amount);
-                    return "transfered successfully";
+                if (s.getBalanceMensa() > amount){
+                    s.setBalanceMensa( s.getBalanceMensa() - amount);
+                    r.setBalanceMensa(r.getBalanceMensa() + amount);
+                    answer= "transfered successfully";
+                    break;
                 }else {
-                    return "insufficient balance";
-
+                    answer= "insufficient balance";
+                    break;
                 }
 
             case "shuttle":
 
-                if (list.getCustomer(sender).getBalanceShuttle() > amount){
-                    list.getCustomer(sender).setBalanceShuttle( list.getCustomer(sender).getBalanceShuttle() - amount);
-                    list.getCustomer(receiver).setBalanceShuttle(list.getCustomer(receiver).getBalanceShuttle() + amount);
-                    return "transfered successfully";
+                if (s.getBalanceShuttle() > amount){
+                    s.setBalanceShuttle( s.getBalanceShuttle() - amount);
+                    r.setBalanceShuttle(r.getBalanceShuttle() + amount);
+                    answer= "transfered successfully";
+                    break;
                 }else {
-                    return "insufficient balance";
-
+                    answer= "insufficient balance";
+                    break;
                 }
 
             default:
-                return "balance not found";
+                answer= "balance not found";
+                break;
 
         }
+        customerRepository.save(s);
+        customerRepository.save(r);
+
+        logTransaction( sender,"Send",answer,balanceId,amount);
+
+        if (answer.equals("transfered successfully")){
+
+
+            logTransaction(receiver,"Receive","received successfully",balanceId,amount);
+        }
+        return answer;
     }
 
 
@@ -248,11 +299,12 @@ public class CustomerController {
     //Gonderen kisinin json dosyasi icinde jwt token ve yeni sifreyi gondermesi gerekir
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     private String changePassword(@RequestBody PasswordInfo passInfo, @RequestHeader("Authorization") String token){
-        String newPass = bCryptPasswordEncoder.encode(passInfo.getNewPass());
+        String newPass = passInfo.getNewPass();
         String customerId = tokenToCustomerIdParser(token);
 
-        Customer s = list.getCustomer(customerId);
+        Customer s = customerRepository.findById(customerId).orElse(new Customer());
         s.setPassword(newPass);
+        customerRepository.save(s);
         return "password changed successfully";
     }
 
@@ -280,11 +332,14 @@ public class CustomerController {
         String qrCode =qrCodeJsonParser.getQrCode();
         String priceId = qrCodeJsonParser.getPriceId();
         String customerId = customerPaymentToken.getCustomerId(qrCode);
-        Customer customer = list.getCustomer(customerId);
+        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
 
         if (customerId!=null){
 
-            double priceAmount = plist.getPrice(customer.getStatus(),priceId);
+            double priceAmount = getPrice(priceId,customer.getStatus());
+            if (priceAmount==-1){
+                return "error with pricing";
+            }
 
             String answer;
 
@@ -319,7 +374,11 @@ public class CustomerController {
 
 
             }
+            customerRepository.save(customer);
             customerPaymentToken.confirmPaymentToken(qrCode,answer);
+
+            logTransaction(customerId,"Pay",answer,priceId,priceAmount);
+
             return answer;
 
         }else {
@@ -349,8 +408,8 @@ public class CustomerController {
         String text = feedbackInfo.getText();
 
         //TODO: Aybuke sinif yazip entegre edecek
-        feedbackList.addFeedback(customerId,star,text);
-
+        com.mmi.tauProjekt.Entity.FeedbackInfo infos= new com.mmi.tauProjekt.Entity.FeedbackInfo(customerId,star,text);
+        feedbackRepository.save(infos);
 
         return "feedback successfully sent";
     }
@@ -365,14 +424,21 @@ public class CustomerController {
     public String recommend(@RequestBody IdInfo idInfo, @RequestHeader("Authorization") String token){
 
         String customerId = tokenToCustomerIdParser(token);
-        Customer c = list.getCustomer(customerId);
+        Customer c = customerRepository.findById(customerId).orElse(new Customer());
+        Recommend r = recommendRepository.findById(customerId).orElse(new Recommend());
 
         if (c == null){
             throw new UsernameNotFoundException(customerId);
         }
 
-        //TODO: yazilacak sinifi empfehlen ekleme methodu
-        listRecommend.addRecommend(customerId);
+        if (r == null) {
+
+            Recommend recommend = new Recommend(idInfo.getId());
+            r=recommend;
+        }else {
+            r.increaseRecommendTime();
+        }
+        recommendRepository.save(r);
 
         return "recommended successfully";
     }
@@ -386,7 +452,8 @@ public class CustomerController {
     @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
     private String forgotPassword(@RequestBody IdInfo idInfo) throws MessagingException {
 
-        Customer customer = list.getCustomer(idInfo.getId());
+        Customer customer = customerRepository.findById(idInfo.getId()).orElse(new Customer());
+
         if (customer == null){
             throw new UsernameNotFoundException(idInfo.getId());
         }
@@ -401,10 +468,13 @@ public class CustomerController {
                                     +"This mail has been sent automatically, please do not reply.<br>"
                                     +"Tau-Pay Support");
 
-        customer.setPassword(bCryptPasswordEncoder.encode(newPass));
+
 
 
         char[] nameArray = mail.toCharArray();
+
+        customer.setPassword(newPass);
+        customerRepository.save(customer);
 
         for (int i = 3; i <nameArray.length ; i++) {
 
@@ -422,6 +492,73 @@ public class CustomerController {
 
 
 
+    @RequestMapping(value = "/donate-item", method = RequestMethod.POST)
+    private String donateItem(@RequestBody FreeItemInfo freeItemInfo, @RequestHeader("Authorization")String token){
+        String customerId = tokenToCustomerIdParser(token);
+        Customer c = customerRepository.findById(customerId).orElse(new Customer());;
+        double price= getPrice(freeItemInfo.priceId,"Student");
+
+        int amount = freeItemInfo.getAmount();
+
+        double finalPrice = price * amount;
+        String answer;
+        switch (freeItemInfo.getPriceId()){
+            case"mensa":
+                    if(c.getBalanceMensa()>=finalPrice ){
+                        c.setBalanceMensa(c.getBalanceMensa()-finalPrice);
+                        answer = "donated succesfully";
+                        break;
+                    }else {
+                        answer = "insufficient balance";
+                        break;
+                    }
+
+
+
+            case"shuttle":
+                    if(c.getBalanceShuttle()>=finalPrice ){
+                        c.setBalanceShuttle(c.getBalanceShuttle()-finalPrice);
+                        answer = "donated succesfully";
+                        break;
+                    }else {
+                        answer = "insufficient balance";
+                        break;
+                    }
+
+            default:
+
+                answer = "price not found";
+                break;
+
+
+        }
+            customerRepository.save(c);
+            logTransaction(customerId,"Donate",answer,freeItemInfo.getPriceId(),amount);
+        return answer;
+    }
+
+
+
+
+    @RequestMapping(value = "/price-check", method = RequestMethod.POST)
+    private String priceCheck(@RequestBody PriceCheck priceCheck){
+        String priceId = priceCheck.getPriceId();
+        String status = priceCheck.getStatus();
+        int amount = priceCheck.getAmount();
+
+        double price = getPrice(priceId,status);
+
+        if (price==-1){
+            return "price not found";
+        }
+
+        Double finalPrice = price*amount;
+
+
+
+
+        return finalPrice.toString();
+    }
 
 
 
@@ -436,8 +573,6 @@ public class CustomerController {
                 .getSubject();
         return Customer;
     }
-
-
 
 
 
@@ -456,26 +591,50 @@ public class CustomerController {
     }
 
 
-/*
-    @Bean
-    public CustomerList list(){
-        return list;
+
+    //Islem kaydi yapan fonksiyon
+    private void logTransaction(String customerId, String type, String transactionStatus,
+                                String balanceId, double amount){
+
+        Date time = new Date();
+
+        Transaction tr = new Transaction(customerId,type,transactionStatus,balanceId,amount,time);
+
+        transactionRepository.save(tr);
     }
-    */
+
+    //Urun tablosundan urun bulur
+    private double getPrice(String priceId, String customerStatus){
+        double price = -1;
+        Iterable<Price> prices = priceRepository.findAll();
+
+        for (Price p: prices ){
+
+            if (p.getType().equals(priceId) && p.getCustomerStatus().equals(customerStatus)){
+                price = p.getPrice();
+                break;
+            }
+        }
+        return price;
+    }
 }
+
+
+
+
 
 
 //Para Transferi bilgilerini saklamak için gecici sinif
 class moneyTransferInfo{
-    String receiverId;
-    String balanceId;
-    int amount;
+    public String receiverId;
+    public String balanceId;
+    public int amount;
 
-    public String getReceiverId() {
+    String getReceiverId() {
         return receiverId;
     }
-    public String getBalanceId(){return balanceId;}
-    public int getAmount() {
+    String getBalanceId(){return balanceId;}
+    int getAmount() {
         return amount;
     }
 }
@@ -483,86 +642,125 @@ class moneyTransferInfo{
 
 //Odeme methodu için gecici sinif
 class PayType{
-    String priceId;
+    public String priceId;
 
-    public String getPriceId() {
+    String getPriceId() {
         return priceId;
     }
 }
 
+
+
 //Para yukleme methodu icin gecici sinif
 class DepositInfo{
-    String balanceId;
-    int amount;
+    public String balanceId;
+    public int amount;
 
-    public String getBalanceId(){return balanceId;}
-    public int getAmount() {
+    String getBalanceId(){return balanceId;}
+    int getAmount() {
         return amount;
     }
 }
 
+
+
 //Sifre degistirmek icin gecici sinif
 class PasswordInfo{
-    String newPass;
+    public String newPass;
 
-    public String getNewPass(){
+    String getNewPass(){
         return newPass;
     }
 }
 
+
+
 //Barkod Okuyucudan gelen kodu almak icin sinif
 class QrCodeJsonParser{
-    String qrCode;
-    String priceId;
+    public String qrCode;
+    public String priceId;
 
-    public QrCodeJsonParser(){
-
-    }
-
+    public QrCodeJsonParser(){ }
     public QrCodeJsonParser(String qrCode){
         this.qrCode = qrCode;
     }
-
-    public String getQrCode() {
+    String getQrCode() {
         return qrCode;
     }
-
-    public String getPriceId(){
+    String getPriceId(){
         return priceId;
     }
-
 }
+
+
 
 //Odendi mi sorgusu icin json sinifi
 class IsPaidInfo{
-    String qrCode;
+    public String qrCode;
 
-    public String getQrCode() {
+    String getQrCode() {
         return qrCode;
     }
 }
+
+
 
 
 //Id bilgisini iceren sinif json icindir
 class IdInfo{
-    String id;
+    public String id;
 
     public String getId() {
         return id;
     }
 }
 
+
+
+
 //Feedback bilgisini tasiyan sinif
 class FeedbackInfo{
-    int star;
-    String text;
+    public int star;
+    public String text;
 
-    public int getStar() {
+    int getStar() {
         return star;
     }
 
-    public String getText() {
+    String getText() {
         return text;
     }
 }
 
+
+//Urun fiyatini orenmek icin json dan okunan sinif
+class PriceCheck{
+    public String priceId;
+    public String status;
+    public int amount;
+
+    String getPriceId() {
+        return priceId;
+    }
+    String getStatus() {
+        return status;
+    }
+    int getAmount() {
+        return amount;
+    }
+}
+
+
+
+//Ucretsiz yaralanamak icin json sinifi
+class FreeItemInfo{
+    public String priceId;
+    public int amount;
+
+    int getAmount() {
+        return amount;
+    }
+    String getPriceId() {
+        return priceId;
+    }
+}

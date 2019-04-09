@@ -1,13 +1,25 @@
 package com.mmi.tauProjekt.Entity;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 
-
+@Entity
+@Table(name = "feedback")
 public class FeedbackInfo {
-    
-      String id;
-      int star;
-      String feedbackText;
+
+
+    @Id
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "feedbackid", updatable = false, nullable = false)
+    private int feedbackId;
+
+    @Column(name = "customerid")
+    private String id;
+    @Column(name = "star")
+    private int star;
+    @Column(name = "text")
+    private String feedbackText;
 
     public FeedbackInfo(String id, int star, String feedbackText) {
         this.id = id;

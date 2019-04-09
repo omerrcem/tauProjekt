@@ -1,8 +1,5 @@
 package com.mmi.tauProjekt;
 
-import com.mmi.tauProjekt.Lists.FeedbackList;
-import com.mmi.tauProjekt.Lists.RecommendList;
-import com.mmi.tauProjekt.Lists.CustomerList;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.StartUp.StartMessage;
 import org.springframework.boot.SpringApplication;
@@ -21,21 +18,9 @@ public class TauProjektApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	//Kullanici listesi olusturulur
-	@Bean
-	public CustomerList customerList(){return new CustomerList();}
-
-
 	//Odeme islemi icin anlik ozel kod ureten sinif
 	@Bean
 	public CustomerPaymentToken customerPaymentToken(){return new CustomerPaymentToken();}
-
-	@Bean
-	public RecommendList recommendList(){return new RecommendList();}
-
-	@Bean
-	public FeedbackList feedbackList(){return new FeedbackList();}
-
 
 
 	public static void main(String[] args) {

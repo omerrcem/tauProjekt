@@ -1,23 +1,38 @@
 package com.mmi.tauProjekt.Entity;
 
+
+import javax.persistence.*;
+
 //Hizmet ve urunlerin ucretlerini saklayan obje
+@Entity
+@Table(name = "price")
 public class Price {
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    private int id;
+    @Column(name = "type")
+    private String type;
+    @Column(name = "customerstatus")
     private String customerStatus;
+    @Column(name = "price")
     private double price;
 
-    public Price(String id, String customerStatus,double price) {
-        this.id = id;
+    public Price(){}
+
+    public Price(String type, String customerStatus,double price) {
+        this.type = type;
         this.customerStatus=customerStatus;
         this.price = price;
     }
 
-    public String getId() {
-        return id;
+    public String getType() {
+        return type;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setType(String id) {
+        this.type = type;
     }
 
     public double getPrice() {

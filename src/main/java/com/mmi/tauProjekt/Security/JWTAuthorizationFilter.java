@@ -62,9 +62,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         + " " + request.getRequestURL() + " " +new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
                         .format(Calendar.getInstance().getTime()));
 
-                if (user.equals("16003103")){
-                    System.out.println("php");
-                }
+
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
 
             }

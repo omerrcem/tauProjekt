@@ -1,20 +1,37 @@
 package com.mmi.tauProjekt.Entity;
 
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 //Ogrenci bilgilerini saklayan obje
 //Sifreler her zaman crypted bir sekilde saklanir
+@Entity
+@Table(name = "customer")
 public class Customer {
 
+    @Id
+    @Column(name = "personid")
     private String id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "mail")
     private String mail;
+    @Column(name = "password")
     private String password;
+    @Column(name = "status")
     private String status;
 
-    private boolean canGetFreeItem = false;
+    @Column(name = "cangetfreeitem")
+    private boolean canGetFreeItem;
 
-    private double balanceMensa = 0;
-    private double balanceShuttle = 0;
+    @Column(name = "balancemensa")
+    private double balanceMensa ;
+    @Column(name = "balanceshuttle")
+    private double balanceShuttle;
+
     public Customer(){
 
     }
@@ -32,6 +49,17 @@ public class Customer {
         this.status = status;
     }
 
+    public Customer(String id, String name, String mail, String password, String status,
+                    boolean canGetFreeItem, double balanceMensa, double balanceShuttle) {
+        this.id = id;
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
+        this.status = status;
+        this.canGetFreeItem = canGetFreeItem;
+        this.balanceMensa = balanceMensa;
+        this.balanceShuttle = balanceShuttle;
+    }
 
     @Override
     public boolean equals(Object obj) {
