@@ -11,7 +11,7 @@ public class FeedbackInfo {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedbackid", updatable = false, nullable = false)
     private int feedbackId;
 
