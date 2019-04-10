@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+//SQL tablosunda islemleri saklamak icin kullanilan sinif
+
 @Entity
 @Table(name = "transaction")
 public class Transaction {

@@ -25,7 +25,7 @@ public class CustomerPaymentToken {
             public void run(){
                 try {
 
-                    TimeUnit.SECONDS.sleep(120);
+                    TimeUnit.SECONDS.sleep(500);
 
                     if (userTokens.containsKey(qrCode)) {
                         userTokens.remove(qrCode);
@@ -54,6 +54,7 @@ public class CustomerPaymentToken {
     }
 
 
+    //Qr kodun hangi kullanciya ait oldugunu bulur
     public String getCustomerId(String uuid){
         if (userTokens.containsKey(uuid)) {
             String customerId = userTokens.get(uuid).getId();
@@ -94,6 +95,7 @@ public class CustomerPaymentToken {
 
 }
 
+//Odeme bilgisini saklayan sinif
 class PaymentInfo{
     String id;
     //boolean isPaid = false;

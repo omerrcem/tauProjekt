@@ -2,36 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e3d7587-88ef-43ab-a811-d34305219bfd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_8_0_15.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/CustomerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/FeedbackRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PriceRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/RecommendRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/TransactionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/PoolAccount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PoolAccountRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/ConnectionControl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Feedback.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Recommend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Recommend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/CustomerList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/FeedbackList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/PriceList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/RecommendList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Mail/MailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Mail/MailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/QrCodeGenerator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/CustomerDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/CustomerDetailsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tauProjekt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tauProjekt.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -72,7 +53,7 @@
         <counts>
           <entry key="RecommendList" value="1" />
           <entry key="class" value="92" />
-          <entry key="java" value="197" />
+          <entry key="java" value="206" />
           <entry key="png" value="2" />
           <entry key="properties" value="6" />
           <entry key="xml" value="8" />
@@ -82,7 +63,7 @@
         <counts>
           <entry key="CLASS" value="92" />
           <entry key="Image" value="2" />
-          <entry key="JAVA" value="197" />
+          <entry key="JAVA" value="206" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Properties" value="6" />
           <entry key="XML" value="8" />
@@ -91,7 +72,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="4" />
-          <entry key="java" value="21614" />
+          <entry key="java" value="23296" />
           <entry key="properties" value="102" />
           <entry key="txt" value="156" />
           <entry key="xml" value="20" />
@@ -99,7 +80,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="21614" />
+          <entry key="JAVA" value="23296" />
           <entry key="PLAIN_TEXT" value="160" />
           <entry key="Properties" value="102" />
           <entry key="XML" value="20" />
@@ -112,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="465" column="43" selection-start-line="464" selection-start-column="30" selection-end-line="465" selection-end-column="43" />
+            <state relative-caret-position="154">
+              <caret line="716" column="23" lean-forward="true" selection-start-line="716" selection-start-column="23" selection-end-line="716" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#getInfo#0;class#CustomerController#0" />
@@ -125,21 +106,56 @@
                 <element signature="method#getQrCode#0;class#CustomerController#0" />
                 <element signature="method#sendQrCode#0;class#CustomerController#0" />
                 <element signature="method#isQrPaid#0;class#CustomerController#0" />
-                <element signature="method#feedback#0;class#CustomerController#0" />
                 <element signature="method#recommend#0;class#CustomerController#0" />
+                <element signature="method#forgotPassword#0;class#CustomerController#0" />
+                <element signature="method#donateItem#0;class#CustomerController#0" />
+                <element signature="method#priceCheck#0;class#CustomerController#0" />
+                <element signature="method#tokenToCustomerIdParser#0;class#CustomerController#0" />
                 <element signature="method#getSaltString#0;class#CustomerController#0" />
+                <element signature="method#logTransaction#0;class#CustomerController#0" />
+                <element signature="method#getPrice#0;class#CustomerController#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Mail/MailService.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PoolAccountRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-387">
-              <caret line="40" column="11" lean-forward="true" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
+            <state relative-caret-position="132">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/ConnectionControl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="10" column="86" selection-start-line="10" selection-start-column="86" selection-end-line="10" selection-end-column="86" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/PoolAccount.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="370">
+              <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+              <folding>
+                <element signature="e#457#458#0" expanded="true" />
+                <element signature="e#501#502#0" expanded="true" />
+                <element signature="e#537#538#0" expanded="true" />
+                <element signature="e#571#572#0" expanded="true" />
+                <element signature="e#601#602#0" expanded="true" />
+                <element signature="e#647#648#0" expanded="true" />
+                <element signature="e#685#686#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -148,8 +164,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="220">
+              <caret line="13" column="4" lean-forward="true" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -158,27 +174,43 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Recommend.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/StartMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="44">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#502#503#0" expanded="true" />
-                <element signature="e#539#540#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="132">
+              <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
               <folding>
-                <element signature="e#1046#1047#0" expanded="true" />
-                <element signature="e#1083#1084#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#1247#1248#0" expanded="true" />
+                <element signature="e#1280#1281#0" expanded="true" />
+                <element signature="e#1329#1330#0" expanded="true" />
+                <element signature="e#1373#1374#0" expanded="true" />
+                <element signature="e#1404#1405#0" expanded="true" />
+                <element signature="e#1431#1432#0" expanded="true" />
+                <element signature="e#1471#1472#0" expanded="true" />
+                <element signature="e#1503#1504#0" expanded="true" />
+                <element signature="e#1559#1560#0" expanded="true" />
+                <element signature="e#1607#1608#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -187,14 +219,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1980">
-              <caret line="98" selection-start-line="98" selection-end-line="98" />
+            <state relative-caret-position="-44">
+              <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1922#1923#0" expanded="true" />
                 <element signature="e#1947#1948#0" expanded="true" />
                 <element signature="e#2172#2173#0" expanded="true" />
                 <element signature="e#2199#2200#0" expanded="true" />
+                <element signature="e#2306#2307#0" expanded="true" />
                 <element signature="e#2337#2338#0" expanded="true" />
                 <element signature="e#2458#2459#0" expanded="true" />
                 <element signature="e#2487#2488#0" expanded="true" />
@@ -204,40 +237,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="63" selection-start-line="8" selection-start-column="63" selection-end-line="8" selection-end-column="63" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+            <state relative-caret-position="201">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="11" column="72" selection-start-line="11" selection-start-column="72" selection-end-line="11" selection-end-column="72" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
-              <caret line="55" selection-start-line="55" selection-end-line="55" />
             </state>
           </provider>
         </entry>
@@ -302,32 +308,35 @@
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/PriceList.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/RecommendList.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/FeedbackList.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/CustomerList.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Identity/PriceIdentity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Feedback.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/TransactionRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/FeedbackRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PriceRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/PriceList.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/CustomerRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/RecommendRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthorizationFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/JWTAuthenticationFilter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/TauProjektApplication.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/CustomerDetailsServiceImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/QrCodeGenerator.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Mail/MailService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Recommend.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/ConnectionControl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/PoolAccount.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PoolAccountRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java" />
       </list>
     </option>
   </component>
@@ -418,6 +427,43 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="QrCode" type="462c0819:PsiDirectoryNode" />
+              <item name="CustomerPaymentToken.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="Repository" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="Security" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="StartUp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tauProjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tauProjekt" type="462c0819:PsiDirectoryNode" />
               <item name="CustomerController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
@@ -446,7 +492,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554841485984" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554898387809" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
     <property name="project.structure.last.edited" value="Project" />
@@ -748,14 +794,21 @@
       <option name="project" value="LOCAL" />
       <updated>1554720485158</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Extra ordinary more development">
+      <created>1554842356306</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1554842356306</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22547974" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22547974" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -764,13 +817,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.4680851" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4978678" visible="true" weight="0.29144096" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4989339" weight="0.3336945" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4978678" visible="true" weight="0.5308776" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4989339" weight="0.53846157" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.3286119" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5021322" side_tool="true" weight="0.345987" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5021322" side_tool="true" weight="0.44853738" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.11205674" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.41928494" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -829,95 +882,42 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java</url>
-          <line>608</line>
+          <line>600</line>
           <properties />
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java</url>
-          <line>198</line>
+          <line>190</line>
           <properties />
           <option name="timeStamp" value="18" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java</url>
+          <line>394</line>
+          <properties />
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java</url>
-          <line>64</line>
+          <line>65</line>
           <properties class="com.mmi.tauProjekt.Entity.Customer" method="equals">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java</url>
+          <line>63</line>
+          <properties class="com.mmi.tauProjekt.CustomerController" method="signUp">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Feedback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="17" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#334#335#0" expanded="true" />
-            <element signature="e#367#368#0" expanded="true" />
-            <element signature="e#419#420#0" expanded="true" />
-            <element signature="e#463#464#0" expanded="true" />
-            <element signature="e#491#492#0" expanded="true" />
-            <element signature="e#518#519#0" expanded="true" />
-            <element signature="e#555#556#0" expanded="true" />
-            <element signature="e#587#588#0" expanded="true" />
-            <element signature="e#618#619#0" expanded="true" />
-            <element signature="e#645#646#0" expanded="true" />
-            <element signature="e#685#686#0" expanded="true" />
-            <element signature="e#717#718#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Identity/PriceIdentity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="7" column="41" selection-start-line="7" selection-start-column="41" selection-end-line="7" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#414#415#0" expanded="true" />
-            <element signature="e#444#445#0" expanded="true" />
-            <element signature="e#490#491#0" expanded="true" />
-            <element signature="e#528#529#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-            <element signature="e#590#591#0" expanded="true" />
-            <element signature="e#634#635#0" expanded="true" />
-            <element signature="e#670#671#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/TransactionRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/FeedbackRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="11" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Lists/PriceList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/CustomerRepository.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -1161,16 +1161,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/5.1.5.RELEASE/spring-aop-5.1.5.RELEASE.jar!/org/springframework/aop/framework/JdkDynamicAopProxy.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
@@ -1205,13 +1195,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="63" selection-start-line="8" selection-start-column="63" selection-end-line="8" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/QrCodeGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
@@ -1219,55 +1202,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="72" selection-start-line="11" selection-start-column="72" selection-end-line="11" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
           <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-          <folding>
-            <element signature="e#1046#1047#0" expanded="true" />
-            <element signature="e#1083#1084#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1922#1923#0" expanded="true" />
-            <element signature="e#1947#1948#0" expanded="true" />
-            <element signature="e#2172#2173#0" expanded="true" />
-            <element signature="e#2199#2200#0" expanded="true" />
-            <element signature="e#2337#2338#0" expanded="true" />
-            <element signature="e#2458#2459#0" expanded="true" />
-            <element signature="e#2487#2488#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1281,9 +1219,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/SecurityConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="49" lean-forward="true" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Mail/MailService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-387">
+        <state relative-caret-position="75">
           <caret line="40" column="11" lean-forward="true" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1293,8 +1238,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Recommend.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        <state relative-caret-position="154">
+          <caret line="7" column="60" selection-start-line="7" selection-start-column="60" selection-end-line="7" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#502#503#0" expanded="true" />
@@ -1303,10 +1248,132 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Price.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="e#1046#1047#0" expanded="true" />
+            <element signature="e#1083#1084#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/FeedbackInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1247#1248#0" expanded="true" />
+            <element signature="e#1280#1281#0" expanded="true" />
+            <element signature="e#1329#1330#0" expanded="true" />
+            <element signature="e#1373#1374#0" expanded="true" />
+            <element signature="e#1404#1405#0" expanded="true" />
+            <element signature="e#1431#1432#0" expanded="true" />
+            <element signature="e#1471#1472#0" expanded="true" />
+            <element signature="e#1503#1504#0" expanded="true" />
+            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="e#1607#1608#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/QrCode/CustomerPaymentToken.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Security/WebSecurityConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/StartMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/StartUp/ConnectionControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="10" column="86" selection-start-line="10" selection-start-column="86" selection-end-line="10" selection-end-column="86" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Transaction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="13" column="4" lean-forward="true" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/PoolAccount.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+          <folding>
+            <element signature="e#457#458#0" expanded="true" />
+            <element signature="e#501#502#0" expanded="true" />
+            <element signature="e#537#538#0" expanded="true" />
+            <element signature="e#571#572#0" expanded="true" />
+            <element signature="e#601#602#0" expanded="true" />
+            <element signature="e#647#648#0" expanded="true" />
+            <element signature="e#685#686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Repository/PoolAccountRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/Entity/Customer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-44">
+          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1922#1923#0" expanded="true" />
+            <element signature="e#1947#1948#0" expanded="true" />
+            <element signature="e#2172#2173#0" expanded="true" />
+            <element signature="e#2199#2200#0" expanded="true" />
+            <element signature="e#2306#2307#0" expanded="true" />
+            <element signature="e#2337#2338#0" expanded="true" />
+            <element signature="e#2458#2459#0" expanded="true" />
+            <element signature="e#2487#2488#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mmi/tauProjekt/CustomerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="465" column="43" selection-start-line="464" selection-start-column="30" selection-end-line="465" selection-end-column="43" />
+        <state relative-caret-position="154">
+          <caret line="716" column="23" lean-forward="true" selection-start-line="716" selection-start-column="23" selection-end-line="716" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#getInfo#0;class#CustomerController#0" />
@@ -1318,9 +1385,14 @@
             <element signature="method#getQrCode#0;class#CustomerController#0" />
             <element signature="method#sendQrCode#0;class#CustomerController#0" />
             <element signature="method#isQrPaid#0;class#CustomerController#0" />
-            <element signature="method#feedback#0;class#CustomerController#0" />
             <element signature="method#recommend#0;class#CustomerController#0" />
+            <element signature="method#forgotPassword#0;class#CustomerController#0" />
+            <element signature="method#donateItem#0;class#CustomerController#0" />
+            <element signature="method#priceCheck#0;class#CustomerController#0" />
+            <element signature="method#tokenToCustomerIdParser#0;class#CustomerController#0" />
             <element signature="method#getSaltString#0;class#CustomerController#0" />
+            <element signature="method#logTransaction#0;class#CustomerController#0" />
+            <element signature="method#getPrice#0;class#CustomerController#0" />
           </folding>
         </state>
       </provider>

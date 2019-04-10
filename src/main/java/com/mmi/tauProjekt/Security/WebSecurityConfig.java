@@ -37,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll().
                 antMatchers(HttpMethod.POST, "/customers/send-qr-code").permitAll().
-                antMatchers(HttpMethod.POST, "/customers/forgot-password").permitAll()
+                antMatchers(HttpMethod.POST, "/customers/forgot-password").permitAll().
+                antMatchers(HttpMethod.GET, "/connect").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

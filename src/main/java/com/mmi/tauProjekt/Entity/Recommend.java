@@ -5,6 +5,7 @@ import com.mmi.tauProjekt.Mail.MailService;
 import javax.mail.MessagingException;
 import javax.persistence.*;
 
+//Onerilen kisileri ve kac kere onerildikleri saklayan sinif
 @Entity
 @Table (name = "recommend")
 public class Recommend{

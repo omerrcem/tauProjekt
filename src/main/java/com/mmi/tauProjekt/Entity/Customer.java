@@ -7,7 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 //Ogrenci bilgilerini saklayan obje
-//Sifreler her zaman crypted bir sekilde saklanir
+//Sifreler raw olarak saklanir
+//
 @Entity
 @Table(name = "customer")
 public class Customer {

@@ -1,9 +1,6 @@
 package com.mmi.tauProjekt;
 
-import com.mmi.tauProjekt.Entity.Customer;
-import com.mmi.tauProjekt.Entity.Price;
-import com.mmi.tauProjekt.Entity.Recommend;
-import com.mmi.tauProjekt.Entity.Transaction;
+import com.mmi.tauProjekt.Entity.*;
 import com.mmi.tauProjekt.Mail.MailService;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.Repository.*;
@@ -35,6 +32,7 @@ public class CustomerController {
     private PriceRepository priceRepository;
     private RecommendRepository recommendRepository;
     private TransactionRepository transactionRepository;
+    private PoolAccountRepository poolAccountRepository;
 
 
     public CustomerController(BCryptPasswordEncoder bCryptPasswordEncoder,
@@ -44,7 +42,8 @@ public class CustomerController {
                               FeedbackRepository feedbackRepository,
                               PriceRepository priceRepository,
                               RecommendRepository recommendRepository,
-                              TransactionRepository transactionRepository) {
+                              TransactionRepository transactionRepository,
+                              PoolAccountRepository poolAccountRepository) {
 
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
@@ -54,11 +53,8 @@ public class CustomerController {
         this.priceRepository=priceRepository;
         this.recommendRepository=recommendRepository;
         this.transactionRepository=transactionRepository;
+        this.poolAccountRepository = poolAccountRepository;
     }
-
-
-
-
 
 
 
@@ -68,13 +64,12 @@ public class CustomerController {
     public void signUp(@RequestBody Customer s) throws CustomException{
         Customer found = customerRepository.findById(s.getId()).orElse(new Customer());
 
-    if (found != null){
+    if (found.getId() != null){
         throw new CustomException("CustomerAlreadyExist");
     }
 
         customerRepository.save(s);
     }
-
 
 
     //Ogrenci bilgisini geitrmek için method
@@ -101,7 +96,6 @@ public class CustomerController {
             return s;
         }
     }
-
 
 
 
@@ -133,7 +127,6 @@ public class CustomerController {
         }
         return new String(nameArray);
     }
-
 
 
 
@@ -191,7 +184,6 @@ public class CustomerController {
 
 
 
-
     //Para yukleme methodu
     //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
     @RequestMapping(value = "/deposit", method = RequestMethod.POST)
@@ -228,8 +220,6 @@ public class CustomerController {
         return answer;
 
     }
-
-
 
 
 
@@ -294,7 +284,6 @@ public class CustomerController {
 
 
 
-
     //Sifre degistirme methodu
     //Gonderen kisinin json dosyasi icinde jwt token ve yeni sifreyi gondermesi gerekir
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
@@ -307,7 +296,6 @@ public class CustomerController {
         customerRepository.save(s);
         return "password changed successfully";
     }
-
 
 
 
@@ -388,7 +376,7 @@ public class CustomerController {
 
 
 
-
+    //Client bir qr kod request ettikten sonra sürekli bu fonksiyonu cagirir
     @RequestMapping(value = "/is-paid", method = RequestMethod.POST)
     public String isQrPaid(@RequestBody IsPaidInfo isPaidInfo,  @RequestHeader("Authorization") String token){
 
@@ -399,16 +387,18 @@ public class CustomerController {
 
 
 
-
+    //Feedback alan fonksiyon
+    //Json icinde yildiz sayisi, mensa veya shuttle mi oldugu ve feedback texti gonderilmeli
     @RequestMapping(value = "/feedback", method = RequestMethod.POST)
     public String feedback(@RequestBody FeedbackInfo feedbackInfo, @RequestHeader("Authorization") String token){
 
         String customerId = tokenToCustomerIdParser(token);
         int star = feedbackInfo.getStar();
         String text = feedbackInfo.getText();
+        String type = feedbackInfo.getType();
 
         //TODO: Aybuke sinif yazip entegre edecek
-        com.mmi.tauProjekt.Entity.FeedbackInfo infos= new com.mmi.tauProjekt.Entity.FeedbackInfo(customerId,star,text);
+        com.mmi.tauProjekt.Entity.FeedbackInfo infos= new com.mmi.tauProjekt.Entity.FeedbackInfo(customerId,star,type,text);
         feedbackRepository.save(infos);
 
         return "feedback successfully sent";
@@ -416,8 +406,6 @@ public class CustomerController {
 
 
 
-
-    //TODO: Recommend sinifi entegre edilecek
     //Kullanici bir kisi onermek icin bu fonksiyonu cagirir
     //Json icinde bir id olması ve yaninda token gonderilmesi gerekir
     @RequestMapping(value = "/recommend", method = RequestMethod.POST)
@@ -491,7 +479,8 @@ public class CustomerController {
 
 
 
-
+    //Bagis yapmak icin kullanilan fonksiyon
+    //json icinde hangi hesap  icin gonderildigi ve kac kere gonderildigi saklanir
     @RequestMapping(value = "/donate-item", method = RequestMethod.POST)
     private String donateItem(@RequestBody FreeItemInfo freeItemInfo, @RequestHeader("Authorization")String token){
         String customerId = tokenToCustomerIdParser(token);
@@ -500,6 +489,8 @@ public class CustomerController {
 
         int amount = freeItemInfo.getAmount();
 
+        PoolAccount poolAccount = poolAccountRepository.findById(freeItemInfo.getPriceId()).orElse(new PoolAccount());
+
         double finalPrice = price * amount;
         String answer;
         switch (freeItemInfo.getPriceId()){
@@ -507,6 +498,7 @@ public class CustomerController {
                     if(c.getBalanceMensa()>=finalPrice ){
                         c.setBalanceMensa(c.getBalanceMensa()-finalPrice);
                         answer = "donated succesfully";
+                        poolAccount.setBalance(poolAccount.getBalance()+finalPrice);
                         break;
                     }else {
                         answer = "insufficient balance";
@@ -519,6 +511,7 @@ public class CustomerController {
                     if(c.getBalanceShuttle()>=finalPrice ){
                         c.setBalanceShuttle(c.getBalanceShuttle()-finalPrice);
                         answer = "donated succesfully";
+                        poolAccount.setBalance(poolAccount.getBalance()+finalPrice);
                         break;
                     }else {
                         answer = "insufficient balance";
@@ -532,6 +525,7 @@ public class CustomerController {
 
 
         }
+            poolAccountRepository.save(poolAccount);
             customerRepository.save(c);
             logTransaction(customerId,"Donate",answer,freeItemInfo.getPriceId(),amount);
         return answer;
@@ -539,7 +533,7 @@ public class CustomerController {
 
 
 
-
+    //Urunlerin fiyatlarini ogrenmek icin kullanilan fonksiyon
     @RequestMapping(value = "/price-check", method = RequestMethod.POST)
     private String priceCheck(@RequestBody PriceCheck priceCheck){
         String priceId = priceCheck.getPriceId();
@@ -575,7 +569,6 @@ public class CustomerController {
     }
 
 
-
     //Random sifre uretir
     protected String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -589,7 +582,6 @@ public class CustomerController {
         return saltStr;
 
     }
-
 
 
     //Islem kaydi yapan fonksiyon
@@ -721,12 +713,13 @@ class IdInfo{
 //Feedback bilgisini tasiyan sinif
 class FeedbackInfo{
     public int star;
+    public String type;
     public String text;
 
     int getStar() {
         return star;
     }
-
+    String getType(){return type;}
     String getText() {
         return text;
     }
