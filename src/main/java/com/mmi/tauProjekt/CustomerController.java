@@ -81,7 +81,7 @@ public class CustomerController {
         //Customer s = list.getCustomerWithoutPass(customerId);
         Customer found = customerRepository.findById(customerId).orElse(new Customer());
 
-        if (found == null) {
+        if (found.getId() == null) {
             throw new UsernameNotFoundException(customerId);
         }else {
             Customer s = new Customer();
@@ -107,8 +107,8 @@ public class CustomerController {
         String customerId = idInfo.getId();
         Customer s = customerRepository.findById(customerId).orElse(new Customer());
 
-        if (s==null){
-            throw  new UsernameNotFoundException(idInfo.getId());
+        if (s.getId()==null){
+            return "user not found";
         }
 
 
@@ -193,7 +193,7 @@ public class CustomerController {
         String customerId = tokenToCustomerIdParser(token);
 
         Customer r = customerRepository.findById(customerId).orElse(new Customer());
-        if (r == null) {
+        if (r.getId() == null) {
             throw new UsernameNotFoundException(customerId);
         }
         String answer;
@@ -234,8 +234,8 @@ public class CustomerController {
 
         Customer s = customerRepository.findById(sender).orElse(new Customer());
         Customer r = customerRepository.findById(receiver).orElse(new Customer());
-        if (r == null) {
-            throw new UsernameNotFoundException(receiver);
+        if (r.getId() == null) {
+            return "user not found";
         }
         String answer;
         switch (balanceId) {
@@ -289,9 +289,15 @@ public class CustomerController {
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     private String changePassword(@RequestBody PasswordInfo passInfo, @RequestHeader("Authorization") String token){
         String newPass = passInfo.getNewPass();
+        String oldPass = passInfo.getOldPass();
         String customerId = tokenToCustomerIdParser(token);
 
         Customer s = customerRepository.findById(customerId).orElse(new Customer());
+
+        if(!s.getPassword().equals(oldPass)){
+            return "wrong password";
+        }
+
         s.setPassword(newPass);
         customerRepository.save(s);
         return "password changed successfully";
@@ -415,11 +421,11 @@ public class CustomerController {
         Customer c = customerRepository.findById(customerId).orElse(new Customer());
         Recommend r = recommendRepository.findById(customerId).orElse(new Recommend());
 
-        if (c == null){
-            throw new UsernameNotFoundException(customerId);
+        if (c.getId() == null){
+            return "user not found";
         }
 
-        if (r == null) {
+        if (r.getCustomerId() == null) {
 
             Recommend recommend = new Recommend(idInfo.getId());
             r=recommend;
@@ -433,7 +439,6 @@ public class CustomerController {
 
 
 
-
     //Sifre unuttum kismi
     //Kullanici token olmadan bir musteri IDsi yollar, eger boyle bir kullanici var ise mail gonderir
     //ve donus olarak hangi maile gonderdigini String olarak yollar
@@ -442,8 +447,8 @@ public class CustomerController {
 
         Customer customer = customerRepository.findById(idInfo.getId()).orElse(new Customer());
 
-        if (customer == null){
-            throw new UsernameNotFoundException(idInfo.getId());
+        if (customer.getId() == null){
+            return "user not found";
         }
         String mail = customer.getMail();
 
@@ -556,8 +561,6 @@ public class CustomerController {
 
 
 
-
-
     //token icindeki kullanici adini geri dondurur
     private String tokenToCustomerIdParser(String token){
         String Customer = Jwts.parser()
@@ -658,7 +661,12 @@ class DepositInfo{
 
 //Sifre degistirmek icin gecici sinif
 class PasswordInfo{
+    public String oldPass;
     public String newPass;
+
+    public String getOldPass() {
+        return oldPass;
+    }
 
     String getNewPass(){
         return newPass;
