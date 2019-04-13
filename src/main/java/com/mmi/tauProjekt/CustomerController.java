@@ -466,31 +466,11 @@ public class CustomerController {
         mailService.sendEmail("support@tau-pay.com",mail,"Şifre Sıfırlama",
                 "Merhaba "+customer.getName()+",<br><br>"
                         +"Şifrenizi sıfırlamak için aşağıdaki linke tıklayınız:<br>"+"<a href="+passwordResetUrl+"><b> "+passwordResetUrl+" </b></a><br><br>"
+                        +"Şifre sıfırlama isteğini siz göndermedeiyseniz bu e-postayı görmezden geliniz.<br>"
                         +"Verilen link sadece 24 saat geçerlidir.<br>"
                         +"Bu e-posta otomatik olarak gönderilmiştir, lütfen cevaplamayınız.<br>"
                         +"Tau-Pay Destek");
 
-
-
-
-/*
-        String newPass = getSaltString();
-
-        //Burada maili atar
-        mailService.sendEmail("support@tau-pay.com",mail,"Password Recovery",
-                            "Hi "+customer.getName()+",<br><br>"
-                                    +"Your new generated password is: "+"<b> "+newPass+" </b><br>"
-                                    +"This mail has been sent automatically, please do not reply.<br>"
-                                    +"Tau-Pay Support");
-
-
-
-
-
-
-        customer.setPassword(newPass);
-        customerRepository.save(customer);
-*/
 
         char[] nameArray = mail.toCharArray();
         for (int i = 3; i <nameArray.length ; i++) {

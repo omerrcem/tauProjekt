@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+
+//Sifremi unuttum sayfasi icin kisiye ozel uretilen token sinifi
+//
+
 @Entity
 @Table(name = "forgot_password_token")
 public class ForgotPasswordToken {

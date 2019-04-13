@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 //SQL tablosunda islemleri saklamak icin kullanilan sinif
+//Orn: odeme, para yukleme, para transferi vs vs
 
 @Entity
 @Table(name = "transaction")

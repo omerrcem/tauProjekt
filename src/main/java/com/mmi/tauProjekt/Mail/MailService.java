@@ -18,6 +18,11 @@ import java.util.Properties;
  * @author Mukuljaiswal
  *
  */
+
+
+//Otomatik mail gondermek icin implemantasyon
+
+
 @Service
 public class MailService {
 

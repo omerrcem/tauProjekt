@@ -2,6 +2,9 @@ package com.mmi.tauProjekt.Entity;
 
 import javax.persistence.*;
 
+
+//Bagislardan gelen paralar buraya yuklenir
+
 @Entity
 @Table(name = "pool_account")
 public class PoolAccount {

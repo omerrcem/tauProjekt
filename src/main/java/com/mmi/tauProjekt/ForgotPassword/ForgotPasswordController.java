@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
+//Mailde gelen linke tiklayinca bu sinif calisir
 @Controller
 public class ForgotPasswordController {
 
@@ -26,6 +27,8 @@ public class ForgotPasswordController {
         this.forgotPasswordTokenRepository=forgotPasswordTokenRepository;
     }
 
+    //Mailde gelen linki icin sifremi unuttum html sayfasini gonderir
+    //Tiklanan link kisiye ve isleme ozeldir, sifre degistikten sonra expire olur
     @RequestMapping(value = "/forgot-password",method = RequestMethod.GET)
     public String newPassHtml(@RequestParam String passwordToken){
 
@@ -33,18 +36,18 @@ public class ForgotPasswordController {
                                                     .orElse(new ForgotPasswordToken());
 
         if (forgotPasswordToken.getToken() != null){
+            //Link gecerli ise sifre degistirme sayfasi doner
             return "forgot-password.html";
         }else {
+            //Link gecersis ise 404 sayfasi doner
             return new ResponseEntity(HttpStatus.NOT_FOUND).toString();
         }
-
-
     }
-
-
 }
 
 
+
+//Sifre degistirme sayfasindan bilgileri alan sinif
 @RestController
 class ForgotPasswordRestController{
 
@@ -58,7 +61,8 @@ class ForgotPasswordRestController{
     }
 
 
-
+    //Html sayfasindaki sifreyi degistire tiklayinca bu fonksiyon calisir
+    //
     @RequestMapping(value = "/confirm-forgot-password",method =RequestMethod.POST)
     public String confirmForgotPass(@RequestBody NewPassInfo newPassInfo){
         String urlToken = newPassInfo.getUrl().split("=")[1];
