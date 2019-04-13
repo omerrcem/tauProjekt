@@ -15,7 +15,7 @@ import java.util.*;
 
 import static com.mmi.tauProjekt.Security.SecurityConstants.SECRET;
 import static com.mmi.tauProjekt.Security.SecurityConstants.TOKEN_PREFIX;
-
+import static com.mmi.tauProjekt.ServerInfo.ServerInfo.mainUrl;
 
 
 @RestController
@@ -33,6 +33,7 @@ public class CustomerController {
     private RecommendRepository recommendRepository;
     private TransactionRepository transactionRepository;
     private PoolAccountRepository poolAccountRepository;
+    private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
 
 
     public CustomerController(BCryptPasswordEncoder bCryptPasswordEncoder,
@@ -43,7 +44,8 @@ public class CustomerController {
                               PriceRepository priceRepository,
                               RecommendRepository recommendRepository,
                               TransactionRepository transactionRepository,
-                              PoolAccountRepository poolAccountRepository) {
+                              PoolAccountRepository poolAccountRepository,
+                              ForgotPasswordTokenRepository forgotPasswordTokenRepository) {
 
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customerPaymentToken = customerPaymentToken;
@@ -54,6 +56,7 @@ public class CustomerController {
         this.recommendRepository=recommendRepository;
         this.transactionRepository=transactionRepository;
         this.poolAccountRepository = poolAccountRepository;
+        this.forgotPasswordTokenRepository = forgotPasswordTokenRepository;
     }
 
 
@@ -451,7 +454,26 @@ public class CustomerController {
             return "user not found";
         }
         String mail = customer.getMail();
+        String customerId = customer.getId();
+        UUID randomUUID = UUID.randomUUID();
+        String token = randomUUID.toString();
 
+        String passwordResetUrl = mainUrl+"/forgot-password?passwordToken="+token;
+
+
+        forgotPasswordTokenRepository.save(new ForgotPasswordToken(token,customerId));
+
+        mailService.sendEmail("support@tau-pay.com",mail,"Şifre Sıfırlama",
+                "Merhaba "+customer.getName()+",<br><br>"
+                        +"Şifrenizi sıfırlamak için aşağıdaki linke tıklayınız:<br>"+"<a href="+passwordResetUrl+"><b> "+passwordResetUrl+" </b></a><br><br>"
+                        +"Verilen link sadece 24 saat geçerlidir.<br>"
+                        +"Bu e-posta otomatik olarak gönderilmiştir, lütfen cevaplamayınız.<br>"
+                        +"Tau-Pay Destek");
+
+
+
+
+/*
         String newPass = getSaltString();
 
         //Burada maili atar
@@ -464,11 +486,13 @@ public class CustomerController {
 
 
 
-        char[] nameArray = mail.toCharArray();
+
 
         customer.setPassword(newPass);
         customerRepository.save(customer);
+*/
 
+        char[] nameArray = mail.toCharArray();
         for (int i = 3; i <nameArray.length ; i++) {
 
            if (nameArray[i] == '@'){

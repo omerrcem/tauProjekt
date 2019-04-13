@@ -38,7 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll().
                 antMatchers(HttpMethod.POST, "/customers/send-qr-code").permitAll().
                 antMatchers(HttpMethod.POST, "/customers/forgot-password").permitAll().
-                antMatchers(HttpMethod.GET, "/connect").permitAll()
+                antMatchers(HttpMethod.GET, "/connect").permitAll().
+                antMatchers(HttpMethod.GET, "/forgot-password*").permitAll().
+                antMatchers(HttpMethod.POST, "/confirm-forgot-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
