@@ -20,6 +20,9 @@ import static com.mmi.tauProjekt.Security.SecurityConstants.SIGN_UP_URL;
 
 //Bu sinifta guvenlik ayarlari yapılıyor
 
+
+
+
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
@@ -39,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(HttpMethod.POST, "/customers/send-qr-code").permitAll().
                 antMatchers(HttpMethod.POST, "/customers/forgot-password").permitAll().
                 antMatchers(HttpMethod.GET, "/connect").permitAll().
+                antMatchers( AUTH_WHITELIST).permitAll().
                 antMatchers(HttpMethod.GET, "/forgot-password*").permitAll().
                 antMatchers(HttpMethod.POST, "/confirm-forgot-password").permitAll()
                 .anyRequest().authenticated()
@@ -67,5 +71,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return source;
     }
+
+    private static final String[] AUTH_WHITELIST = {
+
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
 
 }

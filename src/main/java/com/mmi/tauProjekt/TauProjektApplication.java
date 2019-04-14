@@ -1,11 +1,13 @@
 package com.mmi.tauProjekt;
 
+import com.google.common.reflect.TypeResolver;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.StartUp.StartMessage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 //Uygulama buradan baslar
 
@@ -21,6 +23,7 @@ public class TauProjektApplication {
 	//Odeme islemi icin anlik ozel kod ureten sinif
 	@Bean
 	public CustomerPaymentToken customerPaymentToken(){return new CustomerPaymentToken();}
+
 
 
 	public static void main(String[] args) {

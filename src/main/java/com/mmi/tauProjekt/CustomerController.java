@@ -5,6 +5,10 @@ import com.mmi.tauProjekt.Mail.MailService;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.Repository.*;
 import io.jsonwebtoken.Jwts;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +24,7 @@ import static com.mmi.tauProjekt.ServerInfo.ServerInfo.mainUrl;
 
 @RestController
 @RequestMapping("/customers")
+@Api(value="customers", description="Para işlemleri, müşteri bilgileri vb. işlemler burada yürütülür.")
 public class CustomerController {
 
     @Autowired
@@ -63,21 +68,33 @@ public class CustomerController {
 
     //Ogrenci kayit yeri
     //Token gerektirmez
+            @ApiOperation(value = "Kayıt olma fonksiyonu (Kullanım dışı)")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message =  "(user added) = kullanıcı başarıyla eklendi\n " +
+                                                        "(user already exist) = kullanıcı zaten mevcut")
+            })
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    public void signUp(@RequestBody Customer s) throws CustomException{
-        Customer found = customerRepository.findById(s.getId()).orElse(new Customer());
+    public String signUp(@RequestBody Customer customer) throws CustomException{
+        Customer found = customerRepository.findById(customer.getId()).orElse(new Customer());
 
     if (found.getId() != null){
-        throw new CustomException("CustomerAlreadyExist");
+        return"user already exist";
     }
 
-        customerRepository.save(s);
+        customerRepository.save(customer);
+        return "user added";
     }
+
 
 
     //Ogrenci bilgisini geitrmek için method
     //Gonderilen json dosyası sadece jwt token içermeli
     //Ogrenci sinfini sifresi silinmis bir sekilde geri dondurur
+            @ApiOperation(value = "Kullanıcı bilgisini getirir")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "Kullanıcı bilgisi"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/get-info",method = RequestMethod.POST)
     public Customer getInfo( @RequestHeader("Authorization") String token){
         String customerId = tokenToCustomerIdParser(token);
@@ -104,6 +121,11 @@ public class CustomerController {
 
     //Kullanici adini ister ve gizlenmis br sekilde gonderir
     //
+            @ApiOperation(value = "Transfer işleminden önce kime para atılacağını gösteren fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "Kişinin gizlenmiş ismi"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/get-name",method = RequestMethod.POST)
     public String getName( @RequestHeader("Authorization") String token, @RequestBody IdInfo idInfo){
 
@@ -135,6 +157,13 @@ public class CustomerController {
 
     //Test Odeme methodu normalde odeme islemi qr kod uzerinden oluyor
     //gonderen kisi bir json dosyasına bir jwt token, nereye odedigini
+            @ApiOperation(value = "Ödeme işlemi için fonksiyon (Kullanım dışı)")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(error with pricing) = priceId değişkeni hatalı\n"+
+                                                        "(insufficient balance) = yetersiz bakiye\n"+
+                                                        "(paid successfully) = ödeme başarıyla tamamlandı"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     public String pay(@RequestBody PayType pt, @RequestHeader("Authorization") String token) throws CustomException {
 
@@ -189,6 +218,13 @@ public class CustomerController {
 
     //Para yukleme methodu
     //gonderen kisi bir json dosyasinda yuklenecek miktari ve tokeni gondermeli
+            @ApiOperation(value = "Para yükleme fonksiyonu")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(balance not found) = bakiye bilgisi hatalı\n"+
+                                                       "(deposited successfully) = para başaryla yüklendi\n"),
+
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/deposit", method = RequestMethod.POST)
     public String deopsit(@RequestHeader("Authorization") String token, @RequestBody DepositInfo depositInfo){
         String balanceId = depositInfo.getBalanceId();
@@ -228,6 +264,14 @@ public class CustomerController {
 
     //Para yollama methodu
     //gonderilen, ne kadar gonderildigi ve jwt tokeni json içerisine yazılmalı
+            @ApiOperation(value = "Para transferi için fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(balance not found) = bakiye bilgisi yanlış\n"+
+                                                       "(user not found) = kullanıcı bulunamadı\n"+
+                                                       "(insufficient balance) = yetersiz bakiye\n"+
+                                                       "(transfered successfully) = para transferi başarıyla tamamlandı"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
     public String transfer(@RequestBody moneyTransferInfo mti, @RequestHeader("Authorization") String token) throws CustomException, InterruptedException {
         String sender = tokenToCustomerIdParser(token);
@@ -289,6 +333,12 @@ public class CustomerController {
 
     //Sifre degistirme methodu
     //Gonderen kisinin json dosyasi icinde jwt token ve yeni sifreyi gondermesi gerekir
+            @ApiOperation(value = "Profil ayarlarından şifre değiştirmek için fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(wrong password) = eski şifre hatalı\n"+
+                                                       "(password changed successfully) = şifre başarıyla değiştirildi\n"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     private String changePassword(@RequestBody PasswordInfo passInfo, @RequestHeader("Authorization") String token){
         String newPass = passInfo.getNewPass();
@@ -311,6 +361,11 @@ public class CustomerController {
     //Odeme QrCode uretmek icin method
     //Aybuke uuid generator ile birlestirildi
     //S
+            @ApiOperation(value = "Qr kod istemek için fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "gelen String qr kodun kendisidir"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/request-qr-code", method = RequestMethod.POST)
     private String getQrCode(@RequestHeader("Authorization") String token) {
         String customerId = tokenToCustomerIdParser(token);
@@ -324,6 +379,13 @@ public class CustomerController {
     //Barkod okucudan gelen json dosyasini okuyup isleme sokar
     //Barkod okuyucu okudgu qr kod icerigini ve urun idsini yollamali
     //
+            @ApiOperation(value = "Qr kod tamının fonksiyonu, okudukları qr kodu bu adrese yollayacaklar")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message =  "(error with pricing) = priceId değişkeni hatalı\n"+
+                                                        "(insufficient balance) = yetersiz bakiye\n"+
+                                                        "(paid successfully) = ödeme başarıyla tamamlandı\n"+
+                                                        "(qr code not found) = Qr kod geçerli değil")
+            })
     @RequestMapping(value = "/send-qr-code", method = RequestMethod.POST)
     private String sendQrCode(@RequestBody QrCodeJsonParser qrCodeJsonParser){
         String qrCode =qrCodeJsonParser.getQrCode();
@@ -386,6 +448,14 @@ public class CustomerController {
 
 
     //Client bir qr kod request ettikten sonra sürekli bu fonksiyonu cagirir
+            @ApiOperation(value = "Mobil uygulamadan ödendi mi sorgusu için fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(not paid) = henüz ödenmedi\n"+
+                                                       "(qr code not found) = Qr kod bulunamdı\n"+
+                                                       "(insufficient balance) = yetersiz bakiye\n"+
+                                                       "(paid successfully) = ödeme başarıyla tamamlandı"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/is-paid", method = RequestMethod.POST)
     public String isQrPaid(@RequestBody IsPaidInfo isPaidInfo,  @RequestHeader("Authorization") String token){
 
@@ -398,6 +468,11 @@ public class CustomerController {
 
     //Feedback alan fonksiyon
     //Json icinde yildiz sayisi, mensa veya shuttle mi oldugu ve feedback texti gonderilmeli
+            @ApiOperation(value = "Feedback eklemek için fonksiyon")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "(feedback successfully sent) = feedback başarıyla eklendi"),
+            @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+    })
     @RequestMapping(value = "/feedback", method = RequestMethod.POST)
     public String feedback(@RequestBody FeedbackInfo feedbackInfo, @RequestHeader("Authorization") String token){
 
@@ -417,6 +492,12 @@ public class CustomerController {
 
     //Kullanici bir kisi onermek icin bu fonksiyonu cagirir
     //Json icinde bir id olması ve yaninda token gonderilmesi gerekir
+            @ApiOperation(value = "Bir kişinin askıda ürün alabilmesi için önerildiği fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(user not found) = böyle bir kullanıcı yok\n"+
+                                                       "(recommended successfully) = başarıyla önerildi\n"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/recommend", method = RequestMethod.POST)
     public String recommend(@RequestBody IdInfo idInfo, @RequestHeader("Authorization") String token){
 
@@ -445,6 +526,12 @@ public class CustomerController {
     //Sifre unuttum kismi
     //Kullanici token olmadan bir musteri IDsi yollar, eger boyle bir kullanici var ise mail gonderir
     //ve donus olarak hangi maile gonderdigini String olarak yollar
+            @ApiOperation(value = "Şifremi unuttum fonksiyonu")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(user not found) = böyle bir kişi yok\n"+
+                                                       "bir mail Stringi = gerekli mail verilen adrese gönderildi\n"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/forgot-password",method = RequestMethod.POST)
     private String forgotPassword(@RequestBody IdInfo idInfo) throws MessagingException {
 
@@ -490,6 +577,13 @@ public class CustomerController {
 
     //Bagis yapmak icin kullanilan fonksiyon
     //json icinde hangi hesap  icin gonderildigi ve kac kere gonderildigi saklanir
+            @ApiOperation(value = "Bağış fonksiyonu")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message =  "(price not found) = priceId değişkeni hatalı\n"+
+                                                        "(insufficient balance) = yetersiz bakiye\n"+
+                                                        "(donated successfully) = bağış işlemi başarıyla tamamlandı"),
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/donate-item", method = RequestMethod.POST)
     private String donateItem(@RequestBody FreeItemInfo freeItemInfo, @RequestHeader("Authorization")String token){
         String customerId = tokenToCustomerIdParser(token);
@@ -543,6 +637,13 @@ public class CustomerController {
 
 
     //Urunlerin fiyatlarini ogrenmek icin kullanilan fonksiyon
+            @ApiOperation(value = "Ürün fiyatı öğrenmek için fonksiyon")
+            @ApiResponses(value = {
+                    @ApiResponse(code = 200, message = "(price not found) = priceId değişkeni hatalı\n"+
+                                                       "bir double sayısı = istenilen fiyat\n"),
+
+                    @ApiResponse(code = 403, message = "Hatalı token bilgisi")
+            })
     @RequestMapping(value = "/price-check", method = RequestMethod.POST)
     private String priceCheck(@RequestBody PriceCheck priceCheck){
         String priceId = priceCheck.getPriceId();
