@@ -40,7 +40,6 @@ public class CustomerController {
     private PoolAccountRepository poolAccountRepository;
     private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
 
-
     public CustomerController(BCryptPasswordEncoder bCryptPasswordEncoder,
                               CustomerPaymentToken customerPaymentToken,
                               MailService mailService,
@@ -62,6 +61,7 @@ public class CustomerController {
         this.transactionRepository=transactionRepository;
         this.poolAccountRepository = poolAccountRepository;
         this.forgotPasswordTokenRepository = forgotPasswordTokenRepository;
+
     }
 
 

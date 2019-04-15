@@ -5,6 +5,7 @@ import com.mmi.tauProjekt.Entity.Customer;
 import com.mmi.tauProjekt.Entity.ForgotPasswordToken;
 import com.mmi.tauProjekt.Repository.CustomerRepository;
 import com.mmi.tauProjekt.Repository.ForgotPasswordTokenRepository;
+import com.mmi.tauProjekt.Repository.LoginSessionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,13 @@ public class ForgotPasswordController {
     private CustomerRepository customerRepository;
     private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
 
+
     public ForgotPasswordController(CustomerRepository customerRepository,
-                                    ForgotPasswordTokenRepository forgotPasswordTokenRepository) {
+                                    ForgotPasswordTokenRepository forgotPasswordTokenRepository
+                                    ) {
         this.customerRepository = customerRepository;
         this.forgotPasswordTokenRepository=forgotPasswordTokenRepository;
+
     }
 
     //Mailde gelen linki icin sifremi unuttum html sayfasini gonderir
@@ -53,11 +57,15 @@ class ForgotPasswordRestController{
 
     private CustomerRepository customerRepository;
     private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
+    private LoginSessionRepository loginSessionRepository;
+
 
     public ForgotPasswordRestController(CustomerRepository customerRepository,
-                                        ForgotPasswordTokenRepository forgotPasswordTokenRepository) {
+                                        ForgotPasswordTokenRepository forgotPasswordTokenRepository,
+                                        LoginSessionRepository loginSessionRepository) {
         this.customerRepository = customerRepository;
         this.forgotPasswordTokenRepository = forgotPasswordTokenRepository;
+        this.loginSessionRepository = loginSessionRepository;
     }
 
 
@@ -89,6 +97,7 @@ class ForgotPasswordRestController{
             customer.setPassword(pass);
             customerRepository.save(customer);
             forgotPasswordTokenRepository.delete(forgotPasswordToken);
+            loginSessionRepository.deleteById(customer.getId());
             return "password changed successfully";
         }else {
 

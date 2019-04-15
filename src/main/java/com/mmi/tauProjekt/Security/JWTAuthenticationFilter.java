@@ -3,9 +3,12 @@ package com.mmi.tauProjekt.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmi.tauProjekt.Entity.Customer;
+import com.mmi.tauProjekt.Entity.LoginSession;
+import com.mmi.tauProjekt.Repository.LoginSessionRepository;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,9 +31,12 @@ import static com.mmi.tauProjekt.Security.SecurityConstants.*;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private LoginSessionRepository loginSessionRepository;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, LoginSessionRepository loginSessionRepository) {
         this.authenticationManager = authenticationManager;
+        this.loginSessionRepository = loginSessionRepository;
     }
 
 
@@ -62,14 +68,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
-        System.out.println("User logged in: " + ((User) auth.getPrincipal()).getUsername() + " " +
+        String customerId = ((User) auth.getPrincipal()).getUsername();
+        Date loginTime = new Date();
+        String ipAddress = req.getRemoteAddr();
+
+        //Konsola bilgi girilir
+        System.out.println("User logged in: " + customerId + " " +
                 new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
                 .format(Calendar.getInstance().getTime()));
 
+        //Token olusturulur
         JwtBuilder token = Jwts.builder()
                 .setSubject(((User) auth.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                //.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) //Tokenlar suresiz gecerli
+                .setId(new Date().toString())
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token.compact());
+
+        //Login sessionu database'e kaydedilir
+        loginSessionRepository.save(new LoginSession(customerId,TOKEN_PREFIX + token.compact(),loginTime,ipAddress));
     }
 }
