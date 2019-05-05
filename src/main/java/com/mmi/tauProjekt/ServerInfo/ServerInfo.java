@@ -4,5 +4,5 @@ package com.mmi.tauProjekt.ServerInfo;
 //Mailde sifremi unuttum sayfasininin linki icin gerekiyor
 
 public class ServerInfo {
-    public static final String mainUrl = "http://api.omercem-workshop.com";
+    public static final String mainUrl = "http://api.workshop-omercem.com";
 }
