@@ -13,7 +13,7 @@ public class PoolAccount {
     @Column(name = "poolid")
     String poolid;
 
-    @Column(name = "balance")
+    @Column(name = "balance",precision = 10, scale = 2)
     double balance;
 
     public PoolAccount() {

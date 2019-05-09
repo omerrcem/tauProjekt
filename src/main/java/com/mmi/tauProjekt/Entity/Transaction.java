@@ -28,7 +28,7 @@ public class Transaction {
     @Column(name = "balanceid")
     String balanceId;
 
-    @Column(name = "amount")
+    @Column(name = "amount",precision = 10, scale = 2)
     double amount;
 
     @Column(name = "time")

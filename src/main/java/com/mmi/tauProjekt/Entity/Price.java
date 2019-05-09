@@ -16,7 +16,7 @@ public class Price {
     private String type;
     @Column(name = "customerstatus")
     private String customerStatus;
-    @Column(name = "price")
+    @Column(name = "price", precision = 10, scale = 2)
     private double price;
 
     public Price(){}

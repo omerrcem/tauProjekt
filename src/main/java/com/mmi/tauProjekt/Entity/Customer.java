@@ -28,9 +28,9 @@ public class Customer {
     @Column(name = "cangetfreeitem")
     private boolean canGetFreeItem;
 
-    @Column(name = "balancemensa")
+    @Column(name = "balancemensa",precision=10, scale=2)
     private double balanceMensa ;
-    @Column(name = "balanceshuttle")
+    @Column(name = "balanceshuttle", precision = 10, scale = 2)
     private double balanceShuttle;
 
     public Customer(){

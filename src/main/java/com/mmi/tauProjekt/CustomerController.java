@@ -177,36 +177,46 @@ public class CustomerController {
             return "error with pricing";
         }
         String answer;
-        switch (priceId) {
 
-            case "mensa":
+                if (checkFreeItem(customerId,priceId)){
 
-                if (customer.getBalanceMensa()>priceAmount){
-                    customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
-                    answer= "paid successfully";
-                    break;
+                    answer = "received free item";
+                    PoolAccount poolAccount = poolAccountRepository.findById(priceId).orElse(new PoolAccount());
+                    poolAccount.setBalance(poolAccount.getBalance()-priceAmount);
+                    poolAccountRepository.save(poolAccount);
+
                 }else {
-                    answer= "insufficient balance";
-                    break;
+                    switch (priceId) {
+
+
+                        case "mensa":
+
+                            if (customer.getBalanceMensa() > priceAmount) {
+                                customer.setBalanceMensa(customer.getBalanceMensa() - priceAmount);
+                                answer = "paid successfully";
+                                break;
+                            } else {
+                                answer = "insufficient balance";
+                                break;
+                            }
+
+                        case "shuttle":
+
+                            if (customer.getBalanceShuttle() > priceAmount) {
+                                customer.setBalanceShuttle(customer.getBalanceShuttle() - priceAmount);
+                                answer = "paid successfully";
+                                break;
+                            } else {
+                                answer = "insufficient balance";
+                                break;
+                            }
+
+
+                        default:
+                            answer = "price not found";
+                            break;
+                    }
                 }
-
-            case "shuttle":
-
-                if (customer.getBalanceShuttle()>priceAmount){
-                    customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
-                    answer= "paid successfully";
-                    break;
-                }else {
-                    answer= "insufficient balance";
-                    break;
-                }
-
-
-            default:
-                answer= "price not found";
-                break;
-        }
-
         customerRepository.save(customer);
         logTransaction(customerId,"Pay",answer,priceId,priceAmount  );
         return answer;
@@ -402,36 +412,48 @@ public class CustomerController {
 
             String answer;
 
-            switch (priceId) {
+            //Ucretsiz hizmet alabiliyor mu diye kontrol eder
+            if (checkFreeItem(customerId,priceId)){
 
-                case "mensa":
+                answer = "received free item";
+                PoolAccount poolAccount = poolAccountRepository.findById(priceId).orElse(new PoolAccount());
+                poolAccount.setBalance(poolAccount.getBalance()-priceAmount);
+                poolAccountRepository.save(poolAccount);
 
-                            if (customer.getBalanceMensa()>priceAmount){
-                                customer.setBalanceMensa( customer.getBalanceMensa() - priceAmount);
-                                answer="paid successfully";
-                                break;
-                            }else {
-                                answer = "insufficient balance";
-                                break;
-                            }
-
-                case "shuttle":
-
-                            if (customer.getBalanceShuttle()>priceAmount){
-                                customer.setBalanceShuttle( customer.getBalanceShuttle() - priceAmount);
-                                answer = "paid successfully";
-                                break;
-                            }else {
-                                answer = "insufficient balance";
-                                break;
-                            }
+            }else {
 
 
-                default:
-                            answer= "price not found";
+                switch (priceId) {
+
+                    case "mensa":
+
+                        if (customer.getBalanceMensa() > priceAmount) {
+                            customer.setBalanceMensa(customer.getBalanceMensa() - priceAmount);
+                            answer = "paid successfully";
                             break;
+                        } else {
+                            answer = "insufficient balance";
+                            break;
+                        }
+
+                    case "shuttle":
+
+                        if (customer.getBalanceShuttle() > priceAmount) {
+                            customer.setBalanceShuttle(customer.getBalanceShuttle() - priceAmount);
+                            answer = "paid successfully";
+                            break;
+                        } else {
+                            answer = "insufficient balance";
+                            break;
+                        }
 
 
+                    default:
+                        answer = "price not found";
+                        break;
+
+
+                }
             }
             customerRepository.save(customer);
             customerPaymentToken.confirmPaymentToken(qrCode,answer);
@@ -520,7 +542,6 @@ public class CustomerController {
 
         return "recommended successfully";
     }
-
 
 
     //Sifre unuttum kismi
@@ -664,6 +685,55 @@ public class CustomerController {
         return finalPrice.toString();
     }
 
+
+
+    //Bugun odeme yapan kisiler listesi
+    private ArrayList<String> customersWhoPaidToday(){
+        ArrayList<String> customerListWhoPaid = new ArrayList<>(transactionRepository.getCustomerWhoPaidToday());
+        return customerListWhoPaid;
+    }
+
+
+    //Todo: ayni kisi gun icinde ikinci yemeginde fazla para oder
+    private String roleDecider(){
+        return null;
+    }
+
+
+
+/*
+    private boolean getFreeItem(String customerId, String itemId){
+
+        if (checkFreeItem(customerId,itemId)){
+
+            return true;
+
+        }else {
+            return false;
+        }
+    }
+*/
+
+    //Ucretsiz hizmet alabiliyor mu diye cesitli bilgileri sorgular
+    //true veya false dondurur
+    //Bagis havuzunda para olmali, kisi ucretsiz hizmet alabilmeli, ayni gun baska hizmet kullanmamis olmalı
+    private boolean checkFreeItem(String customerId, String itemId){
+        //can this person get free item
+        boolean canGetFree = customerRepository.findById(customerId).orElse(new Customer()).isCanGetFreeItem();
+
+        //is this person paid today
+        boolean boughtToday = customersWhoPaidToday().contains(customerId);
+
+        //is there enough money in donation pool account
+        PoolAccount poolAccount = poolAccountRepository.findById(itemId).orElse(new PoolAccount());
+        double price = getPrice(itemId,"Student");
+        boolean enoughMoney =poolAccount.getBalance()>=10+price;
+
+        if (enoughMoney && !boughtToday && canGetFree){
+            return true;
+        }
+        return false;
+    }
 
 
     //token icindeki kullanici adini geri dondurur
