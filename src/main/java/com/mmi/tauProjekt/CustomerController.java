@@ -289,6 +289,10 @@ public class CustomerController {
         String balanceId = mti.getBalanceId();
         int amount = mti.getAmount();
 
+        if(amount<0){
+            return "error";
+        }
+
         Customer s = customerRepository.findById(sender).orElse(new Customer());
         Customer r = customerRepository.findById(receiver).orElse(new Customer());
         if (r.getId() == null) {
@@ -612,6 +616,9 @@ public class CustomerController {
         double price= getPrice(freeItemInfo.priceId,"Student");
 
         int amount = freeItemInfo.getAmount();
+        if(amount<0){
+            return "error";
+        }
 
         PoolAccount poolAccount = poolAccountRepository.findById(freeItemInfo.getPriceId()).orElse(new PoolAccount());
 
