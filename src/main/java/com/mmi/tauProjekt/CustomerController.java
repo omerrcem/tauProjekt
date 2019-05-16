@@ -708,19 +708,6 @@ public class CustomerController {
 
 
 
-/*
-    private boolean getFreeItem(String customerId, String itemId){
-
-        if (checkFreeItem(customerId,itemId)){
-
-            return true;
-
-        }else {
-            return false;
-        }
-    }
-*/
-
     //Ucretsiz hizmet alabiliyor mu diye cesitli bilgileri sorgular
     //true veya false dondurur
     //Bagis havuzunda para olmali, kisi ucretsiz hizmet alabilmeli, ayni gun baska hizmet kullanmamis olmalı
