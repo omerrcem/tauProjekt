@@ -3,8 +3,11 @@ package com.mmi.tauProjekt;
 import com.google.common.reflect.TypeResolver;
 import com.mmi.tauProjekt.QrCode.CustomerPaymentToken;
 import com.mmi.tauProjekt.StartUp.StartMessage;
+import org.apache.catalina.connector.Connector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -30,6 +33,23 @@ public class TauProjektApplication {
 		System.out.println(StartMessage.welcomeMessage());
 		SpringApplication.run(TauProjektApplication.class, args);
 	}
+
+
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+
+        TomcatServletWebServerFactory  tomcat = new TomcatServletWebServerFactory();
+
+        Connector ajpConnector = new Connector("AJP/1.3");
+        //ajpConnector.setProtocol("AJP/1.3");
+        ajpConnector.setPort(9090);
+        ajpConnector.setSecure(false);
+        ajpConnector.setAllowTrace(false);
+        ajpConnector.setScheme("http");
+        tomcat.addAdditionalTomcatConnectors(ajpConnector);
+
+        return tomcat;
+    }
 
 }
 
